@@ -1,77 +1,98 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import {
   ArrowRight,
-  Award,
+  ChevronLeft,
+  ChevronRight,
   Crown,
   ExternalLink,
   Heart,
   Instagram,
-  Leaf,
-  Sparkle,
   Sparkles,
   Star,
   ThumbsUp,
   X,
 } from 'lucide-react';
 
+// Fotos reais da Alane (sem moldura) em public/assets/resultados; miniaturas leves em /thumbs.
+// Originais com etiqueta: public/images/cenario/fotos-reais-clientes-alane
+const PHOTO_DIR = '/assets/resultados';
+const photoSrc = (file) => `${PHOTO_DIR}/${file}.webp`;
+const thumbSrc = (file) => `${PHOTO_DIR}/thumbs/${file}.webp`;
+
+// Cada card abre a galeria do procedimento. A legenda de cada foto segue o catálogo
+// (procedimentos combinados e Kit Master mantêm a identificação).
 const RESULTS = [
   {
     id: 'extensao-cilios',
     title: 'Extensão de Cílios',
-    subtitle: 'Volume Brasileiro & Volume 4D',
-    badge: 'O MAIS PEDIDO',
-    image: '/images/secao-resultados/procedimentos/resultado-volume-brasileiro.jpg',
-    imagePosition: '50% 48%',
-    icon: Crown,
+    coverPosition: '50% 56%',
+    photos: [
+      { file: 'extensao-de-cilios-d', caption: 'Extensão de Cílios' },
+      { file: 'extensao-de-cilios-a', caption: 'Extensão de Cílios' },
+      { file: 'extensao-de-cilios-c', caption: 'Extensão de Cílios' },
+      { file: 'extensao-de-cilios-e', caption: 'Extensão de Cílios' },
+      { file: 'extensao-de-cilios-b', caption: 'Extensão de Cílios' },
+    ],
   },
   {
-    id: 'spa-labial',
-    title: 'SPA Labial',
-    subtitle: 'Hidratação & Renovação Celular',
-    badge: 'CUIDADO PROFUNDO',
-    image: '/images/secao-resultados/procedimentos/procedimento-spa-labial.jpg',
-    imagePosition: '50% 54%',
-    icon: Heart,
+    id: 'volume-brasileiro',
+    title: 'Volume Brasileiro',
+    coverPosition: '50% 74%',
+    photos: [
+      { file: 'volume-brasileiro-c', caption: 'Volume Brasileiro' },
+      { file: 'volume-brasileiro-b', caption: 'Volume Brasileiro' },
+      { file: 'volume-brasileiro-d', caption: 'Volume Brasileiro' },
+      { file: 'volume-brasileiro-e', caption: 'Volume Brasileiro' },
+      { file: 'volume-brasileiro-f', caption: 'Volume Brasileiro' },
+      { file: 'volume-brasileiro-a', caption: 'Volume Brasileiro' },
+      { file: 'manutencao-volume-brasileiro-a', caption: 'Manutenção de Volume Brasileiro' },
+      { file: 'brow-lamination-volume-brasileiro-a', caption: 'Brow Lamination + Volume Brasileiro' },
+    ],
   },
   {
-    id: 'designer-sobrancelhas',
-    title: 'Designer de Sobrancelhas',
-    subtitle: 'Mapeamento Anatômico & Henna / Tintura',
-    badge: 'VISAGISMO ÚNICO',
-    image: '/images/secao-resultados/procedimentos/procedimento-designer.jpg',
-    imagePosition: '75% 64%',
-    icon: Sparkles,
+    id: 'volume-4d',
+    title: 'Volume 4D',
+    coverPosition: '50% 50%',
+    photos: [
+      { file: 'volume-4d-b', caption: 'Volume 4D' },
+      { file: 'volume-4d-a', caption: 'Volume 4D' },
+      { file: 'volume-4d-c', caption: 'Volume 4D' },
+    ],
   },
   {
     id: 'brow-lamination',
     title: 'Brow Lamination',
-    subtitle: 'Alinhamento & Encorpamento',
-    badge: 'TENDÊNCIA DE LUXO',
-    image: '/images/secao-resultados/procedimentos/resultado-brow-lamination.jpg',
-    imagePosition: '62% 48%',
-    icon: Award,
+    coverPosition: '50% 74%',
+    photos: [
+      { file: 'brow-lamination-a', caption: 'Brow Lamination' },
+      { file: 'brow-lamination-b', caption: 'Brow Lamination' },
+      { file: 'brow-lamination-kit-master-a', caption: 'Brow Lamination • Kit Master' },
+      { file: 'brow-lamination-volume-brasileiro-a', caption: 'Brow Lamination + Volume Brasileiro' },
+    ],
   },
   {
     id: 'lash-lifting',
-    title: 'Lash Lifting Nutritivo',
-    subtitle: 'Curvatura dos Cílios Naturais',
-    badge: 'NATURALIDADE PURA',
-    image: '/images/secao-resultados/procedimentos/resultado-lash-lifting.jpg',
-    imagePosition: '43% 50%',
-    icon: Leaf,
+    title: 'Lash Lifting',
+    coverPosition: '50% 52%',
+    photos: [
+      { file: 'lash-lifting-a', caption: 'Lash Lifting' },
+      { file: 'lash-lifting-b', caption: 'Lash Lifting' },
+      { file: 'lash-lifting-kit-master-a', caption: 'Lash Lifting • Kit Master' },
+      { file: 'lash-lifting-kit-master-b', caption: 'Lash Lifting • Kit Master' },
+      { file: 'lash-lifting-kit-master-c', caption: 'Lash Lifting • Kit Master' },
+    ],
   },
   {
-    id: 'dermaplaning',
-    title: 'Dermaplaning Facial',
-    subtitle: 'Esfoliação Mecânica & Pele de Seda',
-    badge: 'VIÇO IMEDIATO',
-    image: '/images/secao-resultados/procedimentos/procedimento-dermaplaning.png',
-    imagePosition: '50% 48%',
-    icon: Sparkle,
+    id: 'tebori-repair',
+    title: 'Técnica Tebori Repair',
+    coverPosition: '50% 58%',
+    photos: [
+      { file: 'tecnica-tebori-repair-sobrancelha-a', caption: 'Técnica Tebori Repair (Sobrancelha)' },
+    ],
   },
 ];
 
-const INSTAGRAM_THUMBNAILS = ['01', '04', '05', '03'];
+const INSTAGRAM_THUMBNAILS = ['volume-4d-a', 'extensao-de-cilios-d', 'brow-lamination-a', 'lash-lifting-kit-master-c'];
 
 // Reações que sobem do painel do Instagram: posição (x %), atraso, duração, tamanho e desvio lateral.
 const INSTAGRAM_REACTIONS = [
@@ -87,27 +108,159 @@ const INSTAGRAM_REACTIONS = [
   { type: 'heart', x: 70, delay: 4.6, duration: 4.7, size: 9, drift: -7 },
 ];
 
-export default function ResultsSection({ instagramUrl, instagramHandle }) {
-  const [selectedResult, setSelectedResult] = useState(null);
-  const closeButtonRef = useRef(null);
+// Troca de foto nos cards: lenta e tranquila, com os cards defasados entre si
+const CARD_INTERVAL = 6000;
+const CARD_STAGGER = 1000;
+
+// Card que passeia suavemente pelas fotos do próprio procedimento (crossfade).
+// Só anda quando está visível na tela, com a aba ativa e sem o mouse em cima.
+function GalleryCard({ result, order, onOpen }) {
+  const { photos } = result;
+  const [current, setCurrent] = useState(0);
+  const [previous, setPrevious] = useState(null);
+  const cardRef = useRef(null);
+  const currentRef = useRef(0);
+  const paused = useRef(false);
 
   useEffect(() => {
-    if (!selectedResult) return undefined;
+    if (photos.length < 2) return undefined;
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return undefined;
+
+    let visible = false;
+    let interval;
+    const observer = new IntersectionObserver(([entry]) => { visible = entry.isIntersecting; }, { threshold: 0.3 });
+    observer.observe(cardRef.current);
+
+    const advance = () => {
+      if (!visible || paused.current || document.hidden) return;
+      const from = currentRef.current;
+      const to = (from + 1) % photos.length;
+      currentRef.current = to;
+      setPrevious(from);
+      setCurrent(to);
+    };
+    // Defasagem inicial: cada card troca em um momento diferente
+    const start = setTimeout(() => {
+      interval = setInterval(advance, CARD_INTERVAL);
+    }, order * CARD_STAGGER);
+
+    return () => {
+      observer.disconnect();
+      clearTimeout(start);
+      clearInterval(interval);
+    };
+  }, [photos.length, order]);
+
+  // Pré-carrega a próxima foto para o crossfade não "piscar"
+  useEffect(() => {
+    if (photos.length < 2) return;
+    const next = new Image();
+    next.src = photoSrc(photos[(current + 1) % photos.length].file);
+  }, [current, photos]);
+
+  const positionOf = (index) => (index === 0 ? result.coverPosition : photos[index].position || '50% 55%');
+  const layers = previous === null ? [current] : [previous, current];
+
+  return (
+    <button
+      ref={cardRef}
+      type="button"
+      className="results-gallery-card"
+      onClick={() => onOpen(current)}
+      onMouseEnter={() => { paused.current = true; }}
+      onMouseLeave={() => { paused.current = false; }}
+      aria-label={`Ver galeria de resultados reais: ${result.title} (${photos.length} ${photos.length === 1 ? 'foto' : 'fotos'})`}
+    >
+      {layers.map((index) => (
+        <img
+          key={photos[index].file}
+          className={index === current && previous !== null ? 'is-entering' : undefined}
+          src={photoSrc(photos[index].file)}
+          alt={index === current ? `Resultado real de ${photos[index].caption} feito pela Alane Surmas` : ''}
+          style={{ objectPosition: positionOf(index) }}
+          loading={order < 3 && index === 0 ? undefined : 'lazy'}
+          decoding="async"
+          onAnimationEnd={index === current ? () => setPrevious(null) : undefined}
+        />
+      ))}
+      <span className="results-gallery-shade" aria-hidden="true" />
+      <span className="results-gallery-shine" aria-hidden="true" style={{ '--shine-delay': `${order * 1.4}s` }} />
+      <span className="results-gallery-copy">
+        <strong>{result.title}</strong>
+        <span className="results-gallery-arrow" aria-hidden="true"><ArrowRight /></span>
+      </span>
+      {photos.length > 1 && (
+        <span className="results-gallery-dots" aria-hidden="true">
+          {photos.map((photo, index) => (
+            <i key={photo.file} className={index === current ? 'is-active' : undefined} />
+          ))}
+        </span>
+      )}
+    </button>
+  );
+}
+
+export default function ResultsSection({ instagramUrl, instagramHandle }) {
+  // Galeria aberta: qual procedimento e qual foto dele
+  const [viewer, setViewer] = useState(null);
+  const closeButtonRef = useRef(null);
+  const thumbsRef = useRef(null);
+  const touchStart = useRef(null);
+
+  const selectedResult = viewer ? RESULTS[viewer.result] : null;
+  const photoCount = selectedResult ? selectedResult.photos.length : 0;
+  const currentPhoto = selectedResult ? selectedResult.photos[viewer.photo] : null;
+
+  const closeViewer = useCallback(() => setViewer(null), []);
+  const goTo = useCallback((step) => {
+    setViewer((v) => {
+      if (!v) return v;
+      const total = RESULTS[v.result].photos.length;
+      return { ...v, photo: (v.photo + step + total) % total };
+    });
+  }, []);
+
+  useEffect(() => {
+    if (!viewer) return undefined;
 
     const previousOverflow = document.body.style.overflow;
-    const closeOnEscape = (event) => {
-      if (event.key === 'Escape') setSelectedResult(null);
+    const onKey = (event) => {
+      if (event.key === 'Escape') closeViewer();
+      if (event.key === 'ArrowRight') goTo(1);
+      if (event.key === 'ArrowLeft') goTo(-1);
     };
 
     document.body.style.overflow = 'hidden';
-    window.addEventListener('keydown', closeOnEscape);
+    window.addEventListener('keydown', onKey);
     window.requestAnimationFrame(() => closeButtonRef.current?.focus());
 
     return () => {
       document.body.style.overflow = previousOverflow;
-      window.removeEventListener('keydown', closeOnEscape);
+      window.removeEventListener('keydown', onKey);
     };
-  }, [selectedResult]);
+    // Só reage a abrir/fechar; trocar de foto não reinicia o foco nem o overflow
+  }, [Boolean(viewer), closeViewer, goTo]);
+
+  // Mantém a miniatura ativa visível na faixa
+  useEffect(() => {
+    if (!viewer) return;
+    thumbsRef.current
+      ?.querySelector('[aria-current="true"]')
+      ?.scrollIntoView({ block: 'nearest', inline: 'center', behavior: 'smooth' });
+  }, [viewer]);
+
+  const onTouchStart = (event) => {
+    const t = event.touches[0];
+    touchStart.current = { x: t.clientX, y: t.clientY };
+  };
+  const onTouchEnd = (event) => {
+    if (!touchStart.current) return;
+    const t = event.changedTouches[0];
+    const dx = t.clientX - touchStart.current.x;
+    const dy = t.clientY - touchStart.current.y;
+    touchStart.current = null;
+    if (Math.abs(dx) > 45 && Math.abs(dx) > Math.abs(dy)) goTo(dx < 0 ? 1 : -1);
+  };
 
   return (
     <>
@@ -164,10 +317,32 @@ export default function ResultsSection({ instagramUrl, instagramHandle }) {
                   <stop offset="0.8" stopColor="#ff9dbc" stopOpacity="0.9" />
                   <stop offset="1" stopColor="#ff7fa8" stopOpacity="0" />
                 </linearGradient>
+                <linearGradient id="results-ornament-heart" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="0" stopColor="#ffd3e0" />
+                  <stop offset="1" stopColor="#ff7fa8" />
+                </linearGradient>
+                <radialGradient id="results-ornament-heart-fill" cx="0.38" cy="0.3" r="0.8">
+                  <stop offset="0" stopColor="#ffc2d4" stopOpacity="0.55" />
+                  <stop offset="1" stopColor="#c2275b" stopOpacity="0.15" />
+                </radialGradient>
               </defs>
               <path d="M16 17 C130 11 191 24 244 17" stroke="url(#results-ornament-line)" strokeWidth="1.4" fill="none" />
               <path d="M276 17 C329 10 390 24 504 17" stroke="url(#results-ornament-line)" strokeWidth="1.4" fill="none" />
-              <path d="M260 22.5s-9.5-5.8-9.5-12.2c0-6.4 8.3-8.3 9.5-1.7 1.2-6.6 9.5-4.7 9.5 1.7 0 6.4-9.5 12.2-9.5 12.2Z" stroke="#ff9dbc" strokeWidth="1.5" fill="none" strokeLinejoin="round" />
+              {/* Pontinhos onde a linha encontra o coração */}
+              <circle cx="244" cy="17" r="1.3" fill="#ffc2d4" />
+              <circle cx="276" cy="17" r="1.3" fill="#ffc2d4" />
+              <path d="M236 17l2-2 2 2-2 2Z" fill="#ff9dbc" opacity=".8" />
+              <path d="M280 17l2-2 2 2-2 2Z" fill="#ff9dbc" opacity=".8" />
+              <g className="results-ornament-heart">
+                {/* Coração principal: preenchimento perolado translúcido + contorno em degradê */}
+                <path d="M260 22.5s-9.5-5.8-9.5-12.2c0-6.4 8.3-8.3 9.5-1.7 1.2-6.6 9.5-4.7 9.5 1.7 0 6.4-9.5 12.2-9.5 12.2Z" fill="url(#results-ornament-heart-fill)" stroke="url(#results-ornament-heart)" strokeWidth="1.5" strokeLinejoin="round" />
+                {/* Coração interno fino */}
+                <path d="M260 22.5s-9.5-5.8-9.5-12.2c0-6.4 8.3-8.3 9.5-1.7 1.2-6.6 9.5-4.7 9.5 1.7 0 6.4-9.5 12.2-9.5 12.2Z" transform="translate(260 14.5) scale(.52) translate(-260 -14.5)" fill="none" stroke="#ffd3e0" strokeWidth="1.4" strokeLinejoin="round" opacity=".75" />
+                {/* Reflexo de brilho no lóbulo esquerdo */}
+                <path d="M253.2 10.6c.2-1.9 1.6-3 3.1-2.9" stroke="#fff" strokeWidth="1.1" strokeLinecap="round" fill="none" opacity=".85" />
+              </g>
+              {/* Brilho em estrela ao lado */}
+              <path className="results-ornament-sparkle" d="M273.5 3.5l.7 1.9 1.9.7-1.9.7-.7 1.9-.7-1.9-1.9-.7 1.9-.7Z" fill="#fff0f5" />
             </svg>
           </header>
 
@@ -208,34 +383,14 @@ export default function ResultsSection({ instagramUrl, instagramHandle }) {
           </div>
 
           <div className="results-gallery-grid results-reveal">
-            {RESULTS.map((result) => {
-              const BadgeIcon = result.icon;
-              return (
-                <button
-                  type="button"
-                  key={result.id}
-                  className="results-gallery-card"
-                  onClick={() => setSelectedResult(result)}
-                  aria-label={`Ampliar resultado: ${result.title}`}
-                >
-                  <img
-                    src={result.image}
-                    alt={`${result.title} — ${result.subtitle}`}
-                    style={{ objectPosition: result.imagePosition }}
-                    loading="lazy"
-                  />
-                  <span className="results-gallery-shade" aria-hidden="true" />
-                  <span className="results-gallery-badge"><BadgeIcon aria-hidden="true" />{result.badge}</span>
-                  <span className="results-gallery-copy">
-                    <span>
-                      <strong>{result.title}</strong>
-                      <small>{result.subtitle}</small>
-                    </span>
-                    <span className="results-gallery-arrow" aria-hidden="true"><ArrowRight /></span>
-                  </span>
-                </button>
-              );
-            })}
+            {RESULTS.map((result, index) => (
+              <GalleryCard
+                key={result.id}
+                result={result}
+                order={index}
+                onOpen={(photo) => setViewer({ result: index, photo })}
+              />
+            ))}
           </div>
 
           <div className="results-instagram-panel results-reveal">
@@ -262,7 +417,7 @@ export default function ResultsSection({ instagramUrl, instagramHandle }) {
               </span>
               <div>
                 <h3>SUA PRÓXIMA INSPIRAÇÃO ESTÁ AQUI.</h3>
-                <p>Acompanhe os bastidores, conheça novos procedimentos e descubra mais detalhes do trabalho da Alane.</p>
+                <p>Acompanhe os bastidores, conheça nossos procedimentos e descubra mais detalhes do trabalho da Alane.</p>
               </div>
             </div>
 
@@ -272,13 +427,8 @@ export default function ResultsSection({ instagramUrl, instagramHandle }) {
             </a>
 
             <div className="results-instagram-thumbnails" aria-label="Prévia do portfólio no Instagram">
-              {INSTAGRAM_THUMBNAILS.map((number) => (
-                <img
-                  key={number}
-                  src={`/images/secao-resultados/instagram/thumb-insta-${number}.jpg`}
-                  alt=""
-                  loading="lazy"
-                />
+              {INSTAGRAM_THUMBNAILS.map((file) => (
+                <img key={file} src={thumbSrc(file)} alt="" loading="lazy" decoding="async" />
               ))}
               <span className="results-instagram-count"><strong>+70</strong><small>POSTS</small></span>
             </div>
@@ -292,7 +442,7 @@ export default function ResultsSection({ instagramUrl, instagramHandle }) {
           className="results-lightbox"
           role="presentation"
           onMouseDown={(event) => {
-            if (event.currentTarget === event.target) setSelectedResult(null);
+            if (event.currentTarget === event.target) closeViewer();
           }}
         >
           <div
@@ -301,28 +451,67 @@ export default function ResultsSection({ instagramUrl, instagramHandle }) {
             aria-modal="true"
             aria-labelledby="results-lightbox-title"
           >
-            <button
-              ref={closeButtonRef}
-              type="button"
-              className="results-lightbox-close"
-              onClick={() => setSelectedResult(null)}
-              aria-label="Fechar visualização ampliada"
-            >
-              <X aria-hidden="true" />
-            </button>
-            <img
-              src={selectedResult.image}
-              alt={`${selectedResult.title} — ${selectedResult.subtitle}`}
-              style={{ objectPosition: selectedResult.imagePosition }}
-            />
-            <div className="results-lightbox-caption">
-              <span>{selectedResult.badge}</span>
-              <h3 id="results-lightbox-title">{selectedResult.title}</h3>
-              <p>{selectedResult.subtitle}</p>
+            <header className="results-lightbox-header">
+              <div>
+                <span>RESULTADOS REAIS • ALANE SURMAS</span>
+                <h3 id="results-lightbox-title">{selectedResult.title}</h3>
+              </div>
+              <span className="results-lightbox-counter" aria-live="polite">
+                {viewer.photo + 1} / {photoCount}
+              </span>
+              <button
+                ref={closeButtonRef}
+                type="button"
+                className="results-lightbox-close"
+                onClick={closeViewer}
+                aria-label="Fechar galeria"
+              >
+                <X aria-hidden="true" />
+              </button>
+            </header>
+
+            <div className="results-lightbox-stage" onTouchStart={onTouchStart} onTouchEnd={onTouchEnd}>
+              <img
+                key={currentPhoto.file}
+                className="results-lightbox-photo"
+                src={photoSrc(currentPhoto.file)}
+                alt={`${currentPhoto.caption} — resultado real feito pela Alane Surmas`}
+                decoding="async"
+              />
+              {photoCount > 1 && (
+                <>
+                  <button type="button" className="results-lightbox-nav is-prev" onClick={() => goTo(-1)} aria-label="Foto anterior">
+                    <ChevronLeft aria-hidden="true" />
+                  </button>
+                  <button type="button" className="results-lightbox-nav is-next" onClick={() => goTo(1)} aria-label="Próxima foto">
+                    <ChevronRight aria-hidden="true" />
+                  </button>
+                </>
+              )}
+            </div>
+
+            <div className="results-lightbox-footer">
+              <p className="results-lightbox-photo-caption">{currentPhoto.caption}</p>
               <a href={instagramUrl} target="_blank" rel="noopener noreferrer">
                 <Instagram aria-hidden="true" /> Ver portfólio oficial <ExternalLink aria-hidden="true" />
               </a>
             </div>
+
+            {photoCount > 1 && (
+              <div className="results-lightbox-thumbs" ref={thumbsRef} aria-label="Miniaturas">
+                {selectedResult.photos.map((photo, index) => (
+                  <button
+                    type="button"
+                    key={photo.file}
+                    aria-current={index === viewer.photo ? 'true' : undefined}
+                    aria-label={`Ver foto ${index + 1} de ${photoCount}: ${photo.caption}`}
+                    onClick={() => setViewer((v) => ({ ...v, photo: index }))}
+                  >
+                    <img src={thumbSrc(photo.file)} alt="" loading="lazy" decoding="async" />
+                  </button>
+                ))}
+              </div>
+            )}
           </div>
         </div>
       )}

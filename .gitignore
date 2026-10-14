@@ -55,7 +55,7 @@ Thumbs.db
 !/public/images/cenario/petala-individual-*.png
 !/public/images/cenario/fita-vidro3-transparente.png
 !/public/images/cenario/rosa3-transparente.png
-!/public/images/cenario/rosa-vermelha-queda.webp
+!/public/images/cenario/rosa-rosa-queda.webp
 !/public/images/cenario/lash-macro-procedure.jpg
 
 # Sobre
@@ -64,15 +64,11 @@ Thumbs.db
 # Procedimentos
 !/public/assets/procedimentos/capas/*.webp
 
-# Resultados
+# Resultados (fotos reais sem moldura + miniaturas; os originais com etiqueta ficam só locais)
+!/public/assets/resultados/*.webp
+!/public/assets/resultados/thumbs/*.webp
 !/public/images/secao-resultados/instagram/icone-instagram-flores.png
 !/public/images/secao-resultados/instagram/thumb-insta-0[1-5].jpg
-!/public/images/secao-resultados/procedimentos/procedimento-dermaplaning.png
-!/public/images/secao-resultados/procedimentos/procedimento-designer.jpg
-!/public/images/secao-resultados/procedimentos/procedimento-spa-labial.jpg
-!/public/images/secao-resultados/procedimentos/resultado-brow-lamination.jpg
-!/public/images/secao-resultados/procedimentos/resultado-lash-lifting.jpg
-!/public/images/secao-resultados/procedimentos/resultado-volume-brasileiro.jpg
 
 # Feedbacks
 !/public/images/feedbacks/alane-feedbacks-coracao.webp

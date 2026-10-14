@@ -1,8 +1,11 @@
-/* Botão de rosa que cai pela tela muito de vez em quando (PremiumRose.jsx) */
+/* Rosa que cai do topo até o fim do site a cada 4 minutos (PremiumRose.jsx) */
 
+/* Camada do tamanho do documento inteiro: a rosa atravessa todas as seções */
 .premium-rose-layer {
-  position: fixed;
-  inset: 0;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
   z-index: 45;
   overflow: hidden;
   pointer-events: none;
@@ -11,9 +14,10 @@
 .premium-rose {
   position: absolute;
   top: 0;
-  width: clamp(28px, 2.3vw, 38px);
+  width: clamp(32px, 2.6vw, 44px);
   translate: -50% -110%;
-  animation: premium-rose-fall 11s cubic-bezier(.42, 0, .58, 1) forwards;
+  /* A duração vem do JS, proporcional à altura da página */
+  animation: premium-rose-fall 60s linear forwards;
 }
 
 /* Rosa: sombra leve e um balanço de queda natural, sem brilhos */
@@ -21,8 +25,8 @@
   display: block;
   width: 100%;
   height: auto;
-  /* Leve desfoque, como as pétalas: parece estar em outro plano de profundidade */
-  filter: blur(.9px) drop-shadow(0 4px 5px rgba(60, 0, 15, .28));
+  /* Desfoque suave: parece estar em outro plano de profundidade, sem perder a forma */
+  filter: blur(1.6px) drop-shadow(0 4px 5px rgba(120, 20, 55, .22));
   animation: premium-rose-sway 3.2s ease-in-out infinite alternate;
 }
 
@@ -34,21 +38,29 @@
     opacity: 0;
   }
 
-  8% {
+  2% {
     opacity: 1;
   }
 
-  50% {
+  25% {
     translate: calc(-50% + var(--drift)) 0;
   }
 
-  92% {
+  50% {
+    translate: calc(-50% - var(--drift) * .6) 0;
+  }
+
+  75% {
+    translate: calc(-50% + var(--drift) * .8) 0;
+  }
+
+  97% {
     opacity: 1;
   }
 
   100% {
     top: 100%;
-    translate: calc(-50% - var(--drift) * .4) 10%;
+    translate: calc(-50% - var(--drift) * .3) -100%;
     rotate: var(--spin);
     opacity: 0;
   }

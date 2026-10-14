@@ -26,6 +26,7 @@ import ExperienceSection from './components/ExperienceSection';
 import StudioSection from './components/StudioSection';
 import SiteFooter from './components/SiteFooter';
 import PremiumRose from './components/PremiumRose';
+import HeroTweezer from './components/HeroTweezer';
 
 import { setupInteractivePetals } from './petals';
 
@@ -436,7 +437,6 @@ export default function App() {
         <div className="hero-ambient hero-ambient-right" />
         <div className="hero-light-ray hero-light-ray-one" />
         <div className="hero-light-ray hero-light-ray-two" />
-        <div className="hero-horizon" />
 
         {/* Cenário de Pétalas Realistas em Camada de Profundidade */}
         <div className="hero-petals-layer" aria-hidden="true">
@@ -476,7 +476,7 @@ export default function App() {
             <img src="/images/cenario/petala-individual-8.png" alt="" className="stage-real-petal stage-petal-three" />
             <img src="/images/cenario/petala-individual-3.png" alt="" className="stage-real-petal stage-petal-four" />
             {/* Pinça Alane Surmas em destaque sobre o pedestal */}
-            <img src="/images/hero/pinca-alane.webp" alt="Pinça rosé gravada Alane Surmas segurando um leque de cílios" className="hero-stage-art" width="1200" height="762" />
+            <HeroTweezer />
           </div>
         </div>
         <div className="seam-spacer" aria-hidden="true" />

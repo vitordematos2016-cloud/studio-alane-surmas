@@ -595,8 +595,9 @@ html {
   background:
     linear-gradient(180deg, rgba(255, 255, 255, 0.3), rgba(191, 44, 87, 0.19)),
     repeating-linear-gradient(90deg, transparent 0 120px, rgba(255, 255, 255, .11) 122px, transparent 126px 250px);
-  border-top: 1px solid rgba(255, 255, 255, 0.7);
-  box-shadow: inset 0 16px 50px rgba(255, 255, 255, .35);
+  /* Sem borda: o piso surge aos poucos, sem a "linha" dura no fim do hero */
+  -webkit-mask-image: linear-gradient(180deg, transparent 0, #000 45%);
+  mask-image: linear-gradient(180deg, transparent 0, #000 45%);
   transform: perspective(500px) rotateX(54deg);
   transform-origin: 50% 0;
 }
@@ -606,19 +607,29 @@ html {
   z-index: -3;
   top: 0;
   bottom: 0;
-  width: 29%;
-  filter: blur(24px);
+  width: 56%;
+  filter: blur(40px);
   pointer-events: none;
 }
 
+/* O brilho rosa some por completo antes da borda da caixa,
+   então o rosa das laterais se dissolve no claro do centro sem "linha" */
 .hero-ambient-left {
-  left: -12%;
-  background: radial-gradient(ellipse at right, rgba(255, 102, 146, 0.42), transparent 70%);
+  left: -22%;
+  background: radial-gradient(ellipse 62% 75% at 40% 50%,
+      rgba(255, 102, 146, 0.38) 0%,
+      rgba(255, 120, 160, 0.22) 38%,
+      rgba(255, 160, 188, 0.08) 68%,
+      transparent 100%);
 }
 
 .hero-ambient-right {
-  right: -12%;
-  background: radial-gradient(ellipse at left, rgba(238, 62, 117, 0.4), transparent 70%);
+  right: -22%;
+  background: radial-gradient(ellipse 62% 75% at 60% 50%,
+      rgba(238, 62, 117, 0.36) 0%,
+      rgba(245, 100, 145, 0.2) 38%,
+      rgba(250, 150, 182, 0.08) 68%,
+      transparent 100%);
 }
 
 .hero-light-ray {
@@ -641,18 +652,6 @@ html {
 .hero-light-ray-two {
   right: 20%;
   transform: rotate(24deg);
-}
-
-.hero-horizon {
-  position: absolute;
-  z-index: -1;
-  left: 4%;
-  right: 4%;
-  bottom: 98px;
-  height: 2px;
-  opacity: 0.9;
-  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, .95) 25%, #fff 50%, rgba(255, 255, 255, .95) 75%, transparent);
-  box-shadow: 0 0 18px 5px rgba(255, 255, 255, .52), 0 -10px 35px rgba(255, 213, 224, .55);
 }
 
 .hero-copy {
@@ -1758,9 +1757,6 @@ html {
     right: 3%;
   }
 
-  .hero-horizon {
-    bottom: 30px;
-  }
 }
 
 @media (max-width: 560px) {
@@ -4506,6 +4502,39 @@ html {
   filter: drop-shadow(0 0 7px rgba(255, 112, 153, .38));
 }
 
+/* Coração do ornamento: "batida" lenta e um brilho que pisca ao lado */
+.results-ornament-heart {
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: results-heart-beat 3.6s ease-in-out infinite;
+}
+
+.results-ornament-sparkle {
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: results-heart-sparkle 3.6s ease-in-out infinite;
+}
+
+@keyframes results-heart-beat {
+  0%, 40%, 100% { transform: scale(1); }
+  12% { transform: scale(1.1); }
+  24% { transform: scale(1.03); }
+  30% { transform: scale(1.08); }
+}
+
+@keyframes results-heart-sparkle {
+  0%, 100% { opacity: 0; transform: scale(.4) rotate(0deg); }
+  20%, 45% { opacity: 1; transform: scale(1) rotate(45deg); }
+  65% { opacity: 0; transform: scale(.4) rotate(90deg); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .results-ornament-heart,
+  .results-ornament-sparkle {
+    animation: none;
+  }
+}
+
 .results-benefits {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
@@ -4749,7 +4778,6 @@ html {
     inset 0 1px 3px rgba(255, 255, 255, .72),
     0 15px 32px rgba(25, 0, 8, .56),
     0 0 24px rgba(255, 104, 148, .42);
-  transform: translateY(-3px) scale(1.008);
   outline: none;
 }
 
@@ -4759,40 +4787,138 @@ html {
   transform: scale(1.035);
 }
 
+/* Troca automática de fotos no card: a nova surge devagar por cima da anterior */
+.results-gallery-card>img.is-entering {
+  animation: results-card-crossfade 1.8s ease-in-out both;
+}
+
+@keyframes results-card-crossfade {
+  from {
+    opacity: 0;
+    transform: scale(1.03);
+  }
+
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* Destaque suave: um reflexo de luz atravessa o card de vez em quando,
+   e a borda "respira" um brilho rosa. Cada card em um momento diferente. */
+.results-gallery-shine {
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+  overflow: hidden;
+  border-radius: inherit;
+  pointer-events: none;
+}
+
+.results-gallery-shine::before {
+  content: "";
+  position: absolute;
+  top: -20%;
+  bottom: -20%;
+  left: 0;
+  width: 38%;
+  background: linear-gradient(105deg,
+      transparent 0%,
+      rgba(255, 236, 242, .07) 35%,
+      rgba(255, 245, 248, .2) 50%,
+      rgba(255, 236, 242, .07) 65%,
+      transparent 100%);
+  transform: translateX(-130%) skewX(-14deg);
+  animation: results-card-shine 8.4s ease-in-out infinite;
+  animation-delay: var(--shine-delay, 0s);
+}
+
+@keyframes results-card-shine {
+  0% {
+    transform: translateX(-130%) skewX(-14deg);
+  }
+
+  22%,
+  100% {
+    transform: translateX(330%) skewX(-14deg);
+  }
+}
+
+.results-gallery-card {
+  animation: results-card-glow 8.4s ease-in-out infinite;
+}
+
+.results-gallery-card:nth-child(2) { animation-delay: 1.4s; }
+.results-gallery-card:nth-child(3) { animation-delay: 2.8s; }
+.results-gallery-card:nth-child(4) { animation-delay: 4.2s; }
+.results-gallery-card:nth-child(5) { animation-delay: 5.6s; }
+.results-gallery-card:nth-child(6) { animation-delay: 7s; }
+
+@keyframes results-card-glow {
+  0%,
+  30%,
+  100% {
+    box-shadow:
+      inset 0 1px 2px rgba(255, 255, 255, .5),
+      inset 0 -1px 2px rgba(255, 115, 151, .35),
+      0 9px 24px rgba(28, 0, 8, .42),
+      0 0 15px rgba(255, 92, 137, .19);
+  }
+
+  12% {
+    box-shadow:
+      inset 0 1px 3px rgba(255, 255, 255, .62),
+      inset 0 -1px 2px rgba(255, 115, 151, .4),
+      0 9px 24px rgba(28, 0, 8, .42),
+      0 0 24px rgba(255, 110, 155, .38);
+  }
+}
+
+/* No hover o brilho próprio do card (mais forte) assume no lugar da "respiração" */
+.results-gallery-card:hover,
+.results-gallery-card:focus-visible {
+  animation: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .results-gallery-card,
+  .results-gallery-shine::before {
+    animation: none;
+  }
+}
+
+/* Indicador discreto de quantas fotos o card tem */
+.results-gallery-dots {
+  position: absolute;
+  top: 11px;
+  right: 12px;
+  z-index: 2;
+  display: flex;
+  gap: 4px;
+  padding: 4px 6px;
+  border-radius: 999px;
+  background: rgba(40, 2, 13, .35);
+  backdrop-filter: blur(4px);
+}
+
+.results-gallery-dots i {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: rgba(255, 225, 233, .45);
+  transition: background .6s ease, transform .6s ease;
+}
+
+.results-gallery-dots i.is-active {
+  background: #fff1f5;
+  transform: scale(1.2);
+}
+
 .results-gallery-shade {
   position: absolute;
   inset: 0;
   z-index: 1;
   background: linear-gradient(180deg, rgba(38, 1, 11, .08) 30%, rgba(46, 2, 14, .2) 56%, rgba(31, 0, 9, .93) 100%);
-}
-
-.results-gallery-badge {
-  position: absolute;
-  top: 10px;
-  left: 10px;
-  z-index: 2;
-  display: inline-flex;
-  align-items: center;
-  gap: 5px;
-  min-height: 21px;
-  padding: 4px 8px;
-  border: 1px solid rgba(255, 188, 205, .38);
-  border-radius: 999px;
-  color: #fff3f5;
-  background: rgba(50, 2, 16, .78);
-  box-shadow: 0 5px 13px rgba(25, 0, 8, .35);
-  backdrop-filter: blur(8px);
-  font-family: "Plus Jakarta Sans", sans-serif;
-  font-size: 7px;
-  font-weight: 700;
-  letter-spacing: .08em;
-  line-height: 1;
-}
-
-.results-gallery-badge svg {
-  width: 10px;
-  height: 10px;
-  color: #ff9bb7;
 }
 
 .results-gallery-copy {
@@ -4805,30 +4931,13 @@ html {
   gap: 12px;
 }
 
-.results-gallery-copy>span:first-child {
-  display: flex;
-  min-width: 0;
-  flex-direction: column;
-}
-
 .results-gallery-copy strong {
   color: #fff5f5;
   font-family: "Cormorant Garamond", Georgia, serif;
-  font-size: clamp(18px, 1.45vw, 22px);
+  font-size: clamp(20px, 1.65vw, 26px);
   font-weight: 600;
   line-height: 1;
   text-shadow: 0 2px 8px rgba(20, 0, 6, .85);
-}
-
-.results-gallery-copy small {
-  margin-top: 3px;
-  overflow: hidden;
-  color: rgba(255, 232, 237, .88);
-  font-family: "Plus Jakarta Sans", sans-serif;
-  font-size: 8px;
-  line-height: 1.25;
-  text-overflow: ellipsis;
-  white-space: nowrap;
 }
 
 .results-gallery-arrow {
@@ -5124,6 +5233,7 @@ html {
   letter-spacing: .08em;
 }
 
+/* Galeria ampliada por procedimento: foto inteira (sem corte), setas, contador e miniaturas */
 .results-lightbox {
   position: fixed;
   inset: 0;
@@ -5131,37 +5241,76 @@ html {
   display: grid;
   place-items: center;
   padding: 24px;
-  background: rgba(17, 0, 5, .86);
+  background:
+    radial-gradient(ellipse at 50% 0%, rgba(150, 22, 62, .45), transparent 60%),
+    rgba(26, 0, 9, .9);
   backdrop-filter: blur(16px);
   animation: results-lightbox-in .24s ease both;
 }
 
 .results-lightbox-dialog {
   position: relative;
-  display: grid;
-  grid-template-columns: minmax(0, 1.55fr) minmax(250px, .65fr);
-  width: min(1040px, 96vw);
-  max-height: 88vh;
-  overflow: hidden;
-  border: 1px solid rgba(255, 185, 205, .78);
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  width: min(980px, 96vw);
+  max-height: calc(100dvh - 48px);
+  padding: 16px 18px 14px;
+  border: 1px solid rgba(255, 185, 205, .7);
   border-radius: 24px;
-  background: linear-gradient(135deg, rgba(100, 11, 34, .98), rgba(31, 2, 11, .99));
-  box-shadow: inset 0 1px rgba(255, 255, 255, .2), 0 30px 80px rgba(0, 0, 0, .62), 0 0 36px rgba(255, 93, 140, .25);
+  background: linear-gradient(150deg, rgba(110, 13, 40, .97), rgba(48, 3, 17, .98) 55%, rgba(32, 2, 11, .99));
+  box-shadow:
+    inset 0 1px rgba(255, 255, 255, .22),
+    inset 0 -1px rgba(255, 120, 160, .2),
+    0 30px 80px rgba(0, 0, 0, .62),
+    0 0 36px rgba(255, 93, 140, .22);
+  animation: results-dialog-in .32s cubic-bezier(.16, 1, .3, 1) both;
 }
 
-.results-lightbox-dialog>img {
-  width: 100%;
-  height: min(72vh, 680px);
-  object-fit: cover;
-  background: #27020c;
+.results-lightbox-header {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.results-lightbox-header>div {
+  flex: 1;
+  min-width: 0;
+}
+
+.results-lightbox-header>div>span {
+  color: #ff9eba;
+  font-family: "Plus Jakarta Sans", sans-serif;
+  font-size: 8px;
+  font-weight: 700;
+  letter-spacing: .16em;
+}
+
+.results-lightbox-header h3 {
+  margin: 3px 0 0;
+  color: #fff2f4;
+  font-family: "Cormorant Garamond", Georgia, serif;
+  font-size: clamp(24px, 2.4vw, 34px);
+  font-weight: 600;
+  line-height: 1;
+}
+
+.results-lightbox-counter {
+  padding: 6px 11px;
+  border: 1px solid rgba(255, 170, 195, .4);
+  border-radius: 999px;
+  color: #ffe3ea;
+  background: rgba(40, 2, 13, .6);
+  font-family: "Plus Jakarta Sans", sans-serif;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: .06em;
+  font-variant-numeric: tabular-nums;
 }
 
 .results-lightbox-close {
-  position: absolute;
-  top: 13px;
-  right: 13px;
-  z-index: 3;
   display: grid;
+  flex: 0 0 38px;
   width: 38px;
   height: 38px;
   place-items: center;
@@ -5171,6 +5320,7 @@ html {
   background: rgba(61, 3, 20, .86);
   box-shadow: 0 6px 18px rgba(0, 0, 0, .35);
   cursor: pointer;
+  transition: background .25s ease;
 }
 
 .results-lightbox-close:hover,
@@ -5185,42 +5335,89 @@ html {
   height: 18px;
 }
 
-.results-lightbox-caption {
+/* Palco: a foto aparece inteira, na proporção original, sem passar da tela */
+.results-lightbox-stage {
+  position: relative;
+  display: grid;
+  min-height: 0;
+  flex: 1 1 auto;
+  place-items: center;
+  overflow: hidden;
+  border: 1px solid rgba(255, 190, 210, .45);
+  border-radius: 16px;
+  background: radial-gradient(ellipse at center, rgba(90, 8, 32, .9), rgba(28, 1, 9, .95));
+  box-shadow: inset 0 1px rgba(255, 255, 255, .14), inset 0 0 30px rgba(0, 0, 0, .35);
+  touch-action: pan-y;
+}
+
+.results-lightbox-photo {
+  display: block;
+  max-width: 100%;
+  max-height: calc(100dvh - 300px);
+  width: auto;
+  height: auto;
+  object-fit: contain;
+  user-select: none;
+  animation: results-photo-in .35s ease both;
+}
+
+.results-lightbox-nav {
+  position: absolute;
+  top: 50%;
+  display: grid;
+  width: 42px;
+  height: 42px;
+  place-items: center;
+  border: 1px solid rgba(255, 188, 206, .75);
+  border-radius: 50%;
+  color: #fff4f6;
+  background: rgba(100, 10, 38, .78);
+  box-shadow: inset 0 1px rgba(255, 255, 255, .22), 0 6px 18px rgba(0, 0, 0, .35), 0 0 14px rgba(255, 96, 142, .25);
+  backdrop-filter: blur(6px);
+  cursor: pointer;
+  translate: 0 -50%;
+  transition: background .25s ease, box-shadow .25s ease;
+}
+
+.results-lightbox-nav.is-prev {
+  left: 12px;
+}
+
+.results-lightbox-nav.is-next {
+  right: 12px;
+}
+
+.results-lightbox-nav:hover,
+.results-lightbox-nav:focus-visible {
+  background: #b21d4b;
+  box-shadow: 0 0 20px rgba(255, 142, 174, .55);
+  outline: none;
+}
+
+.results-lightbox-nav svg {
+  width: 20px;
+  height: 20px;
+}
+
+.results-lightbox-footer {
   display: flex;
-  flex-direction: column;
-  justify-content: center;
-  padding: 38px 28px;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
 }
 
-.results-lightbox-caption>span {
-  color: #ff9eba;
-  font-family: "Plus Jakarta Sans", sans-serif;
-  font-size: 8px;
-  font-weight: 700;
-  letter-spacing: .15em;
-}
-
-.results-lightbox-caption h3 {
-  margin: 8px 0 2px;
-  color: #fff2f4;
-  font-family: "Cormorant Garamond", Georgia, serif;
-  font-size: clamp(32px, 3vw, 46px);
-  font-weight: 600;
-  line-height: .95;
-}
-
-.results-lightbox-caption p {
-  margin: 7px 0 24px;
-  color: rgba(255, 225, 232, .78);
+.results-lightbox-photo-caption {
+  margin: 0;
+  color: rgba(255, 228, 235, .9);
   font-family: "Plus Jakarta Sans", sans-serif;
   font-size: 12px;
-  line-height: 1.5;
+  font-weight: 600;
 }
 
-.results-lightbox-caption a {
+.results-lightbox-footer a {
   display: inline-flex;
+  flex-shrink: 0;
   align-items: center;
-  align-self: flex-start;
   gap: 7px;
   color: #ffd5e0;
   font-family: "Plus Jakarta Sans", sans-serif;
@@ -5229,9 +5426,54 @@ html {
   text-decoration: none;
 }
 
-.results-lightbox-caption a svg {
+.results-lightbox-footer a svg {
   width: 14px;
   height: 14px;
+}
+
+.results-lightbox-thumbs {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  overflow-x: auto;
+  padding: 3px 2px 4px;
+  scrollbar-width: none;
+}
+
+.results-lightbox-thumbs::-webkit-scrollbar {
+  display: none;
+}
+
+.results-lightbox-thumbs button {
+  flex: 0 0 auto;
+  width: 64px;
+  height: 50px;
+  padding: 0;
+  overflow: hidden;
+  border: 1px solid rgba(255, 187, 205, .35);
+  border-radius: 9px;
+  background: #2a020d;
+  opacity: .55;
+  cursor: pointer;
+  transition: opacity .25s ease, border-color .25s ease, box-shadow .25s ease;
+}
+
+.results-lightbox-thumbs button:hover,
+.results-lightbox-thumbs button:focus-visible {
+  opacity: .85;
+  outline: none;
+}
+
+.results-lightbox-thumbs button[aria-current="true"] {
+  border-color: rgba(255, 210, 222, .95);
+  box-shadow: 0 0 12px rgba(255, 110, 155, .5);
+  opacity: 1;
+}
+
+.results-lightbox-thumbs img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
 }
 
 .results-reveal {
@@ -5336,6 +5578,16 @@ html {
   to { opacity: 1; }
 }
 
+@keyframes results-dialog-in {
+  from { opacity: 0; transform: translateY(14px) scale(.98); }
+  to { opacity: 1; transform: none; }
+}
+
+@keyframes results-photo-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
 @media (max-width: 1024px) {
   .results-showcase {
     padding: 30px 24px 34px;
@@ -5427,10 +5679,6 @@ html {
     font-size: 21px;
   }
 
-  .results-gallery-copy small {
-    font-size: 8.5px;
-  }
-
   .results-instagram-panel {
     grid-template-columns: 1fr;
     gap: 13px;
@@ -5487,27 +5735,46 @@ html {
   }
 
   .results-lightbox {
-    padding: 12px;
+    padding: 10px;
   }
 
   .results-lightbox-dialog {
-    grid-template-columns: 1fr;
-    width: min(520px, 100%);
-    max-height: 94vh;
-    overflow-y: auto;
+    width: 100%;
+    max-height: calc(100dvh - 20px);
+    padding: 12px 12px 10px;
     border-radius: 18px;
   }
 
-  .results-lightbox-dialog>img {
-    height: min(56vh, 520px);
+  .results-lightbox-photo {
+    max-height: calc(100dvh - 270px);
   }
 
-  .results-lightbox-caption {
-    padding: 22px 20px 24px;
+  .results-lightbox-nav {
+    width: 36px;
+    height: 36px;
   }
 
-  .results-lightbox-caption h3 {
-    font-size: 34px;
+  .results-lightbox-nav.is-prev {
+    left: 6px;
+  }
+
+  .results-lightbox-nav.is-next {
+    right: 6px;
+  }
+
+  .results-lightbox-footer {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 6px;
+  }
+
+  .results-lightbox-thumbs {
+    justify-content: flex-start;
+  }
+
+  .results-lightbox-thumbs button {
+    width: 54px;
+    height: 42px;
   }
 }
 
@@ -5516,7 +5783,9 @@ html {
   .results-showcase-side-art,
   .results-showcase-petal,
   .results-showcase-header h2 strong,
-  .results-lightbox {
+  .results-lightbox,
+  .results-lightbox-dialog,
+  .results-lightbox-photo {
     animation: none !important;
   }
 
@@ -5642,6 +5911,22 @@ img[src*="/petala"].petal-falling {
   mask-image: linear-gradient(180deg, transparent 0, #000 var(--seam));
 }
 
+/* Hero (rosa claro) → Sobre (vinho): o contraste é grande, então a rampa linear
+   aparecia como uma faixa. Aqui a transparência entra em curva suave (ease-in-out). */
+#sobre.seam-in {
+  --seam-ease: linear-gradient(180deg,
+      transparent 0,
+      rgba(0, 0, 0, .03) calc(var(--seam) * .15),
+      rgba(0, 0, 0, .12) calc(var(--seam) * .3),
+      rgba(0, 0, 0, .3) calc(var(--seam) * .45),
+      rgba(0, 0, 0, .55) calc(var(--seam) * .6),
+      rgba(0, 0, 0, .8) calc(var(--seam) * .75),
+      rgba(0, 0, 0, .95) calc(var(--seam) * .9),
+      #000 var(--seam));
+  -webkit-mask-image: var(--seam-ease);
+  mask-image: var(--seam-ease);
+}
+
 /* ========================================================
    HERO — CENÁRIO CENTRAL (pinça em destaque)
    Pinça flutuando no centro, com pétalas em volta e sombra suave no chão.
@@ -5668,17 +5953,45 @@ img[src*="/petala"].petal-falling {
 }
 
 /* Pinça em destaque: grande, sobre o pedestal e à frente dele, abaixo do título e do botão */
-.hero-stage-art {
+/* Wrapper interativo: inclina em 3D com o cursor e pode ser arrastado (HeroTweezer.jsx) */
+.hero-tweezer {
+  --tw-rx: 0deg;
+  --tw-ry: 0deg;
+  --tw-rz: 0deg;
+  --tw-x: 0px;
+  --tw-y: 0px;
   position: absolute;
   z-index: 4;
   left: 50%;
   bottom: 12%;
   height: 72%;
-  width: auto;
   max-width: 96%;
-  object-fit: contain;
   translate: -50% 0;
-  filter: drop-shadow(0 22px 26px rgba(120, 20, 55, .28));
+  transform:
+    perspective(1100px)
+    translate3d(var(--tw-x), var(--tw-y), 0)
+    rotateX(var(--tw-rx))
+    rotateY(var(--tw-ry))
+    rotateZ(var(--tw-rz));
+  transform-style: preserve-3d;
+  cursor: grab;
+  touch-action: pan-y;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+.hero-tweezer.is-dragging {
+  cursor: grabbing;
+}
+
+.hero-stage-art {
+  display: block;
+  height: 100%;
+  width: auto;
+  max-width: 100%;
+  object-fit: contain;
+  /* A sombra acompanha a inclinação, reforçando a sensação de profundidade */
+  filter: drop-shadow(var(--tw-sx, 0px) var(--tw-sy, 22px) 26px rgba(120, 20, 55, .28));
   pointer-events: none;
   animation: hero-art-float 7s ease-in-out infinite;
 }
@@ -5985,4 +6298,57 @@ img[src*="/petala"].petal-falling {
   .wa-float-btn::after {
     animation: none !important;
   }
+}
+
+/* ========================================================
+   LEGIBILIDADE NO CELULAR E TABLET
+   No desktop os rótulos pequenos e espaçados seguem a referência visual; em telas
+   menores eles ficavam com 5–8px. Aqui ganham um tamanho mínimo legível.
+   (:root aumenta a especificidade para valer também sobre os CSS dos componentes)
+======================================================== */
+@media (max-width: 1024px) {
+  :root .hero-brand-copy small { font-size: 7px; }
+  :root .hero-header-cta span { font-size: 8.5px; }
+  :root .hero-desktop-nav a,
+  :root .hero-mobile-nav a { font-size: 9px; }
+
+  :root .hero-kicker,
+  :root .about-kicker span,
+  :root .procedures-kicker,
+  :root .results-showcase-kicker span,
+  :root .xp-kicker { font-size: 9px; }
+
+  :root .hero-copy p { font-size: 11.5px; line-height: 1.5; }
+  :root .hero-book-button span { font-size: 10px; }
+
+  :root .about-introduction { font-size: 12px; line-height: 1.55; }
+  :root .about-qualification h3 { font-size: 10px; line-height: 1.3; }
+  :root .about-qualification p { font-size: 11px; line-height: 1.45; }
+  :root .about-contact span { font-size: 10px; }
+  :root .about-master-badge span,
+  :root .about-values-card>div span { font-size: 8.5px; }
+
+  :root .procedure-tag { font-size: 9.5px; }
+
+  :root .results-benefit-card p { font-size: 11px; line-height: 1.4; }
+  :root .results-gallery-heading>div>span { font-size: 9px; }
+  :root .results-instagram-cta span { font-size: 9.5px; }
+  :root .results-instagram-intro p { font-size: 11px; line-height: 1.45; }
+  :root .results-instagram-count strong { font-size: 11px; }
+  :root .results-instagram-count small { font-size: 7.5px; }
+
+  :root .fb-author small { font-size: 10px; }
+
+  :root .xp-badge-result,
+  :root .xp-badge-excellence { font-size: 9.5px; }
+  :root .xp-badge-isolation small { font-size: 10px; }
+
+  /* Espaço no fim do rodapé para o botão flutuante do WhatsApp não cobrir a assinatura */
+  :root .ft-bottom { padding-bottom: 96px; }
+}
+
+/* Celulares bem estreitos (≤360px): o cabeçalho não tem espaço para tudo no tamanho acima */
+@media (max-width: 360px) {
+  :root .hero-brand-copy small { font-size: 6px; letter-spacing: .12em; }
+  :root .hero-header-cta span { font-size: 8px; }
 }
