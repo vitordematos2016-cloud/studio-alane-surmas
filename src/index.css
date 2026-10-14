@@ -1503,7 +1503,10 @@ html {
 
 @keyframes hero-enter {
   from {
-    opacity: 0;
+    /* 0.01 em vez de 0: imperceptível, mas o Chrome só conta como LCP o que é pintado com
+       opacidade > 0. Com 0, o título e a pinça nunca entravam na métrica e o LCP caía numa
+       pétala que entra na tela segundos depois. */
+    opacity: .01;
     translate: 0 20px;
   }
 
@@ -6351,4 +6354,22 @@ img[src*="/petala"].petal-falling {
 @media (max-width: 360px) {
   :root .hero-brand-copy small { font-size: 6px; letter-spacing: .12em; }
   :root .hero-header-cta span { font-size: 8px; }
+}
+
+/* ========================================================
+   PERFORMANCE: animações decorativas pausadas fora da tela
+   O App marca com .is-offscreen as seções a mais de 300px da área visível.
+   Animação pausada não consome CPU/GPU e continua do mesmo ponto ao voltar.
+======================================================== */
+.is-offscreen,
+.is-offscreen *,
+.is-offscreen *::before,
+.is-offscreen *::after {
+  animation-play-state: paused !important;
+}
+
+/* A barra de rolagem existe desde o 1º quadro: como as seções montam aos poucos, a página
+   começa com só o hero e a barra "aparecia" depois, deslocando tudo para o lado (CLS). */
+html {
+  overflow-y: scroll;
 }

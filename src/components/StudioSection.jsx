@@ -10,14 +10,14 @@ const RegionCity3D = lazy(() => import('./RegionCity3D'));
 const ENDERECO = 'Rua José Sampaio, 32 - 2º Andar, Sala 203 - Loteamento Bertuol, Guaraniaçu - PR, CEP 85400-000';
 
 const PETALAS = [
-  { src: 'petala-individual-4.png', left: '9%', top: '5%', w: 74, r: -14, blur: 0, d: 0 },
-  { src: 'petala-individual-8.png', left: '5.5%', top: '33%', w: 40, r: 26, blur: 0, d: -3 },
-  { src: 'petala-individual-5.png', left: '2%', top: '62%', w: 66, r: 10, blur: 1.5, d: -6 },
-  { src: 'petala-individual-3.png', left: '3%', top: '86%', w: 84, r: -18, blur: 2, d: -2 },
-  { src: 'petala-individual-8.png', right: '9%', top: '3%', w: 44, r: 30, blur: 0, d: -4 },
-  { src: 'petala-individual-4.png', right: '8%', top: '12%', w: 62, r: -22, blur: 0, d: -7 },
-  { src: 'petala-individual-5.png', right: '6%', top: '70%', w: 58, r: 16, blur: 0.5, d: -1 },
-  { src: 'petala-individual-3.png', right: '4%', top: '91%', w: 60, r: -10, blur: 1, d: -5 },
+  { src: 'petala-individual-4.webp', left: '9%', top: '5%', w: 74, r: -14, blur: 0, d: 0 },
+  { src: 'petala-individual-8.webp', left: '5.5%', top: '33%', w: 40, r: 26, blur: 0, d: -3 },
+  { src: 'petala-individual-5.webp', left: '2%', top: '62%', w: 66, r: 10, blur: 1.5, d: -6 },
+  { src: 'petala-individual-3.webp', left: '3%', top: '86%', w: 84, r: -18, blur: 2, d: -2 },
+  { src: 'petala-individual-8.webp', right: '9%', top: '3%', w: 44, r: 30, blur: 0, d: -4 },
+  { src: 'petala-individual-4.webp', right: '8%', top: '12%', w: 62, r: -22, blur: 0, d: -7 },
+  { src: 'petala-individual-5.webp', right: '6%', top: '70%', w: 58, r: 16, blur: 0.5, d: -1 },
+  { src: 'petala-individual-3.webp', right: '4%', top: '91%', w: 60, r: -10, blur: 1, d: -5 },
 ];
 
 // Marcador de localização em "vidro" rosa com coração, em SVG (nítido em qualquer tamanho)
@@ -77,10 +77,19 @@ function TitleHeart() {
 export default function StudioSection({ onSchedule, mapsUrl, mapsEmbed }) {
   const sectionRef = useRef(null);
   const [visible, setVisible] = useState(false);
+  // O 3D (three.js, ~250 KB) só é baixado quando a seção se aproxima da tela
+  const [nearViewport, setNearViewport] = useState(false);
 
   useEffect(() => {
     const node = sectionRef.current;
     if (!node) return undefined;
+    const near = new IntersectionObserver(([entry]) => {
+      if (entry.isIntersecting) {
+        setNearViewport(true);
+        near.disconnect();
+      }
+    }, { rootMargin: '600px 0px' });
+    near.observe(node);
     const reveal = new IntersectionObserver(([entry]) => {
       if (entry.isIntersecting) {
         setVisible(true);
@@ -88,7 +97,10 @@ export default function StudioSection({ onSchedule, mapsUrl, mapsEmbed }) {
       }
     }, { threshold: 0.12 });
     reveal.observe(node);
-    return () => reveal.disconnect();
+    return () => {
+      near.disconnect();
+      reveal.disconnect();
+    };
   }, []);
 
   return (
@@ -103,10 +115,10 @@ export default function StudioSection({ onSchedule, mapsUrl, mapsEmbed }) {
 
       <div className="st-backdrop" aria-hidden="true">
         <span className="st-sparkles" />
-        <img src="/images/cenario/fita-vidro3-transparente.png" alt="" className="st-side-ribbon st-side-ribbon-left" />
-        <img src="/images/cenario/fita-vidro3-transparente.png" alt="" className="st-side-ribbon st-side-ribbon-right" />
+        <img loading="lazy" decoding="async" src="/images/cenario/fita-vidro3-transparente.webp" alt="" className="st-side-ribbon st-side-ribbon-left" />
+        <img loading="lazy" decoding="async" src="/images/cenario/fita-vidro3-transparente.webp" alt="" className="st-side-ribbon st-side-ribbon-right" />
         {PETALAS.map((p, i) => (
-          <img
+          <img loading="lazy" decoding="async"
             key={i}
             src={`/images/cenario/${p.src}`}
             alt=""
@@ -200,9 +212,11 @@ export default function StudioSection({ onSchedule, mapsUrl, mapsEmbed }) {
           {/* DIAMANTE DO SUL */}
           <article className="st-card st-card-region st-reveal st-reveal-3">
             <div className="st-region-art" aria-hidden="true">
-              <Suspense fallback={null}>
-                <RegionCity3D className="st-region-3d" />
-              </Suspense>
+              {nearViewport && (
+                <Suspense fallback={null}>
+                  <RegionCity3D className="st-region-3d" />
+                </Suspense>
+              )}
             </div>
 
             <div className="st-card-top">

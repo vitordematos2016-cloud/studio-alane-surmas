@@ -106,10 +106,14 @@ export default function HeroTweezer() {
     <div ref={wrapRef} className="hero-tweezer">
       <img
         src="/images/hero/pinca-alane.webp"
+        srcSet="/images/hero/pinca-alane-640.webp 640w, /images/hero/pinca-alane-960.webp 960w, /images/hero/pinca-alane.webp 1200w"
+        sizes="(max-width: 1280px) 46vw, 590px"
         alt="Pinça rosé gravada Alane Surmas segurando um leque de cílios"
         className="hero-stage-art"
         width="1200"
         height="762"
+        fetchPriority="high"
+        decoding="async"
         draggable="false"
       />
     </div>

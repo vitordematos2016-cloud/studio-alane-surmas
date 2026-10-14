@@ -11,12 +11,12 @@ const DIFERENCIAIS = [
 
 // Pétalas nas extremidades da seção, fora do conteúdo (posições em % da seção)
 const PETALAS = [
-  { src: 'petala-individual-4.png', left: '2%', top: '7%', w: 78, r: -16, blur: 0, d: 0 },
-  { src: 'petala-individual-8.png', left: '1.5%', top: '42%', w: 46, r: 22, blur: 0, d: -3 },
-  { src: 'petala-individual-5.png', left: '5%', top: '86%', w: 70, r: 8, blur: 1, d: -6 },
-  { src: 'petala-individual-3.png', right: '2.5%', top: '4%', w: 58, r: 28, blur: 0, d: -2 },
-  { src: 'petala-individual-4.png', right: '1.5%', top: '36%', w: 50, r: -24, blur: 0, d: -5 },
-  { src: 'petala-individual-5.png', right: '3%', top: '84%', w: 104, r: 14, blur: 2.5, d: -1 },
+  { src: 'petala-individual-4.webp', left: '2%', top: '7%', w: 78, r: -16, blur: 0, d: 0 },
+  { src: 'petala-individual-8.webp', left: '1.5%', top: '42%', w: 46, r: 22, blur: 0, d: -3 },
+  { src: 'petala-individual-5.webp', left: '5%', top: '86%', w: 70, r: 8, blur: 1, d: -6 },
+  { src: 'petala-individual-3.webp', right: '2.5%', top: '4%', w: 58, r: 28, blur: 0, d: -2 },
+  { src: 'petala-individual-4.webp', right: '1.5%', top: '36%', w: 50, r: -24, blur: 0, d: -5 },
+  { src: 'petala-individual-5.webp', right: '3%', top: '84%', w: 104, r: 14, blur: 2.5, d: -1 },
 ];
 
 function OrnamentHeart() {
@@ -93,10 +93,10 @@ export default function ExperienceSection({ onSchedule }) {
         <div className="seam-spacer" aria-hidden="true" />
       <div className="xp-backdrop" aria-hidden="true">
         <span className="xp-sparkles" />
-        <img src="/images/cenario/fita-vidro3-transparente.png" alt="" className="xp-side-ribbon xp-side-ribbon-left" />
-        <img src="/images/cenario/fita-vidro3-transparente.png" alt="" className="xp-side-ribbon xp-side-ribbon-right" />
+        <img loading="lazy" decoding="async" src="/images/cenario/fita-vidro3-transparente.webp" alt="" className="xp-side-ribbon xp-side-ribbon-left" />
+        <img loading="lazy" decoding="async" src="/images/cenario/fita-vidro3-transparente.webp" alt="" className="xp-side-ribbon xp-side-ribbon-right" />
         {PETALAS.map((p, i) => (
-          <img
+          <img loading="lazy" decoding="async"
             key={i}
             src={`/images/cenario/${p.src}`}
             alt=""
@@ -186,7 +186,7 @@ export default function ExperienceSection({ onSchedule }) {
             <div className="xp-frame">
               <div className="xp-photo">
                 <img
-                  src="/images/cenario/lash-macro-procedure.jpg"
+                  src="/images/cenario/lash-macro-procedure.webp"
                   alt="Extensão de cílios com olho fechado, cílios volumosos e curvatura natural"
                   width="1024"
                   height="1024"

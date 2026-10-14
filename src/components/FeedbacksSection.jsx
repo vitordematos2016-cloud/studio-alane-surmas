@@ -24,14 +24,14 @@ const MENSAGENS_WHATSAPP = [
 
 // Posições das pétalas em unidades da referência (1145 × 785)
 const PETALAS = [
-  { src: 'petala-individual-4.png', x: -100, y: 18, w: 104, r: -18, blur: 0, d: 0 },
-  { src: 'petala-individual-8.png', x: 66, y: 74, w: 44, r: 24, blur: 0, d: -3 },
-  { src: 'petala-individual-5.png', x: -48, y: 440, w: 66, r: 8, blur: 0, d: -6 },
-  { src: 'petala-individual-3.png', x: -112, y: 640, w: 150, r: -12, blur: 3, d: -2 },
-  { src: 'petala-individual-8.png', x: 1036, y: 14, w: 44, r: 30, blur: 0, d: -4 },
-  { src: 'petala-individual-4.png', x: 1210, y: 150, w: 50, r: -20, blur: 0, d: -7 },
-  { src: 'petala-individual-5.png', x: 1110, y: 450, w: 120, r: 16, blur: 3.5, d: -1 },
-  { src: 'petala-individual-4.png', x: 1080, y: 715, w: 70, r: -26, blur: 0.5, d: -5 },
+  { src: 'petala-individual-4.webp', x: -100, y: 18, w: 104, r: -18, blur: 0, d: 0 },
+  { src: 'petala-individual-8.webp', x: 66, y: 74, w: 44, r: 24, blur: 0, d: -3 },
+  { src: 'petala-individual-5.webp', x: -48, y: 440, w: 66, r: 8, blur: 0, d: -6 },
+  { src: 'petala-individual-3.webp', x: -112, y: 640, w: 150, r: -12, blur: 3, d: -2 },
+  { src: 'petala-individual-8.webp', x: 1036, y: 14, w: 44, r: 30, blur: 0, d: -4 },
+  { src: 'petala-individual-4.webp', x: 1210, y: 150, w: 50, r: -20, blur: 0, d: -7 },
+  { src: 'petala-individual-5.webp', x: 1110, y: 450, w: 120, r: 16, blur: 3.5, d: -1 },
+  { src: 'petala-individual-4.webp', x: 1080, y: 715, w: 70, r: -26, blur: 0.5, d: -5 },
 ];
 
 function WhatsAppIcon() {
@@ -190,8 +190,8 @@ export default function FeedbacksSection({ depoimentos }) {
         <span className="fb-glow fb-glow-left" />
         <span className="fb-glow fb-glow-right" />
         <span className="fb-sparkles" />
-        <img src="/images/cenario/fita-vidro3-transparente.png" alt="" className="fb-side-ribbon fb-side-ribbon-left" />
-        <img src="/images/cenario/fita-vidro3-transparente.png" alt="" className="fb-side-ribbon fb-side-ribbon-right" />
+        <img loading="lazy" decoding="async" src="/images/cenario/fita-vidro3-transparente.webp" alt="" className="fb-side-ribbon fb-side-ribbon-left" />
+        <img loading="lazy" decoding="async" src="/images/cenario/fita-vidro3-transparente.webp" alt="" className="fb-side-ribbon fb-side-ribbon-right" />
       </div>
 
       <div className="fb-wrap">
@@ -216,7 +216,7 @@ export default function FeedbacksSection({ depoimentos }) {
           onBlur={() => setPaused(false)}
         >
           {PETALAS.map((p, i) => (
-            <img
+            <img loading="lazy" decoding="async"
               key={i}
               src={`/images/cenario/${p.src}`}
               alt=""
@@ -257,7 +257,7 @@ export default function FeedbacksSection({ depoimentos }) {
             )}
             <div className="fb-portrait-glass">
               <div className="fb-portrait-photo">
-                <img
+                <img loading="lazy" decoding="async"
                   src="/images/feedbacks/alane-feedbacks-coracao.webp"
                   alt="Alane Surmas sorrindo segurando um balão de coração escrito Feedbacks"
                   width="1000"

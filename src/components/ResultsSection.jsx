@@ -18,6 +18,9 @@ import {
 const PHOTO_DIR = '/assets/resultados';
 const photoSrc = (file) => `${PHOTO_DIR}/${file}.webp`;
 const thumbSrc = (file) => `${PHOTO_DIR}/thumbs/${file}.webp`;
+// Card: versão de 480px quando basta (desktop/tablet); a foto inteira fica para telas densas e a galeria
+const cardSrcSet = (file) => `${PHOTO_DIR}/480/${file}.webp 480w, ${photoSrc(file)} 900w`;
+const CARD_SIZES = '(max-width: 700px) 92vw, (max-width: 1024px) 46vw, 380px';
 
 // Cada card abre a galeria do procedimento. A legenda de cada foto segue o catálogo
 // (procedimentos combinados e Kit Master mantêm a identificação).
@@ -121,6 +124,8 @@ function GalleryCard({ result, order, onOpen }) {
   const cardRef = useRef(null);
   const currentRef = useRef(0);
   const paused = useRef(false);
+  // Só depois que o card aparece na tela vale a pena pré-carregar a próxima foto
+  const [seen, setSeen] = useState(false);
 
   useEffect(() => {
     if (photos.length < 2) return undefined;
@@ -128,7 +133,10 @@ function GalleryCard({ result, order, onOpen }) {
 
     let visible = false;
     let interval;
-    const observer = new IntersectionObserver(([entry]) => { visible = entry.isIntersecting; }, { threshold: 0.3 });
+    const observer = new IntersectionObserver(([entry]) => {
+      visible = entry.isIntersecting;
+      if (visible) setSeen(true);
+    }, { threshold: 0.3 });
     observer.observe(cardRef.current);
 
     const advance = () => {
@@ -153,10 +161,14 @@ function GalleryCard({ result, order, onOpen }) {
 
   // Pré-carrega a próxima foto para o crossfade não "piscar"
   useEffect(() => {
-    if (photos.length < 2) return;
+    if (photos.length < 2 || !seen) return;
+    // Mesmo srcset/sizes do card, para o navegador escolher (e reaproveitar) a mesma versão
     const next = new Image();
-    next.src = photoSrc(photos[(current + 1) % photos.length].file);
-  }, [current, photos]);
+    const file = photos[(current + 1) % photos.length].file;
+    next.sizes = CARD_SIZES;
+    next.srcset = cardSrcSet(file);
+    next.src = photoSrc(file);
+  }, [current, photos, seen]);
 
   const positionOf = (index) => (index === 0 ? result.coverPosition : photos[index].position || '50% 55%');
   const layers = previous === null ? [current] : [previous, current];
@@ -176,6 +188,8 @@ function GalleryCard({ result, order, onOpen }) {
           key={photos[index].file}
           className={index === current && previous !== null ? 'is-entering' : undefined}
           src={photoSrc(photos[index].file)}
+          srcSet={cardSrcSet(photos[index].file)}
+          sizes={CARD_SIZES}
           alt={index === current ? `Resultado real de ${photos[index].caption} feito pela Alane Surmas` : ''}
           style={{ objectPosition: positionOf(index) }}
           loading={order < 3 && index === 0 ? undefined : 'lazy'}
@@ -241,6 +255,17 @@ export default function ResultsSection({ instagramUrl, instagramHandle }) {
     // Só reage a abrir/fechar; trocar de foto não reinicia o foco nem o overflow
   }, [Boolean(viewer), closeViewer, goTo]);
 
+  // Prepara a próxima e a anterior em segundo plano: navegação fluida sem baixar a galeria inteira
+  useEffect(() => {
+    if (!viewer) return;
+    const list = RESULTS[viewer.result].photos;
+    if (list.length < 2) return;
+    [1, -1].forEach((step) => {
+      const img = new Image();
+      img.src = photoSrc(list[(viewer.photo + step + list.length) % list.length].file);
+    });
+  }, [viewer]);
+
   // Mantém a miniatura ativa visível na faixa
   useEffect(() => {
     if (!viewer) return;
@@ -269,28 +294,28 @@ export default function ResultsSection({ instagramUrl, instagramHandle }) {
         <div className="results-showcase-scene" aria-hidden="true">
           <div className="results-showcase-bokeh results-showcase-bokeh-left" />
           <div className="results-showcase-bokeh results-showcase-bokeh-right" />
-          <img
-            src="/images/cenario/rosa3-transparente.png"
+          <img loading="lazy" decoding="async"
+            src="/images/cenario/rosa3-transparente.webp"
             alt=""
             className="results-showcase-side-art results-showcase-comp"
           />
-          <img
-            src="/images/cenario/rosa3-transparente.png"
+          <img loading="lazy" decoding="async"
+            src="/images/cenario/rosa3-transparente.webp"
             alt=""
             className="results-showcase-side-art results-showcase-rose"
           />
-          <img
-            src="/images/cenario/petala-individual-3.png"
+          <img loading="lazy" decoding="async"
+            src="/images/cenario/petala-individual-3.webp"
             alt=""
             className="results-showcase-petal results-showcase-petal-one"
           />
-          <img
-            src="/images/cenario/petala-individual-8.png"
+          <img loading="lazy" decoding="async"
+            src="/images/cenario/petala-individual-8.webp"
             alt=""
             className="results-showcase-petal results-showcase-petal-two"
           />
-          <img
-            src="/images/cenario/petala-individual-5.png"
+          <img loading="lazy" decoding="async"
+            src="/images/cenario/petala-individual-5.webp"
             alt=""
             className="results-showcase-petal results-showcase-petal-three"
           />
@@ -413,7 +438,7 @@ export default function ResultsSection({ instagramUrl, instagramHandle }) {
             </div>
             <div className="results-instagram-intro">
               <span className="results-instagram-icon">
-                <img src="/images/secao-resultados/instagram/icone-instagram-flores.png" alt="" aria-hidden="true" />
+                <img loading="lazy" decoding="async" src="/images/secao-resultados/instagram/icone-instagram-flores.webp" alt="" aria-hidden="true" />
               </span>
               <div>
                 <h3>SUA PRÓXIMA INSPIRAÇÃO ESTÁ AQUI.</h3>

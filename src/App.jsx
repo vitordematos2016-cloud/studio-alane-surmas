@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, lazy, Suspense } from 'react';
 import { 
   Sparkles, 
   Clock, 
@@ -18,23 +18,30 @@ import {
   EllipsisVertical,
   X
 } from 'lucide-react';
-import gsap from 'gsap';
-import { ScrollTrigger } from 'gsap/ScrollTrigger';
-import ResultsSection from './components/ResultsSection';
-import FeedbacksSection from './components/FeedbacksSection';
-import ExperienceSection from './components/ExperienceSection';
-import StudioSection from './components/StudioSection';
-import SiteFooter from './components/SiteFooter';
-import PremiumRose from './components/PremiumRose';
+// Seções abaixo do topo em arquivos separados: o 1º download leva só o necessário para o hero.
+// Elas já entram depois (montagem progressiva), então baixar sob demanda não muda nada visualmente.
+const loadResults = () => import('./components/ResultsSection');
+const loadFeedbacks = () => import('./components/FeedbacksSection');
+const loadExperience = () => import('./components/ExperienceSection');
+const loadStudio = () => import('./components/StudioSection');
+const loadFooter = () => import('./components/SiteFooter');
+const ResultsSection = lazy(loadResults);
+const FeedbacksSection = lazy(loadFeedbacks);
+const ExperienceSection = lazy(loadExperience);
+const StudioSection = lazy(loadStudio);
+const SiteFooter = lazy(loadFooter);
+const PremiumRose = lazy(() => import('./components/PremiumRose'));
 import HeroTweezer from './components/HeroTweezer';
 
 import { setupInteractivePetals } from './petals';
 
-gsap.registerPlugin(ScrollTrigger);
 
 // Dados Factuais Validados de Alane Surmas
 // Links de contato: vêm do .env (VITE_*) e usam os valores oficiais como padrão
 const env = import.meta.env;
+// Quantidade de etapas da montagem progressiva (Sobre … Rodapé)
+const SECTION_STAGES = 7;
+const whenIdle = (fn) => (window.requestIdleCallback ? window.requestIdleCallback(fn, { timeout: 300 }) : setTimeout(fn, 60));
 const WHATSAPP_URL = env.VITE_WHATSAPP_URL || "https://wa.me/5545998378624";
 const INSTAGRAM_URL = env.VITE_INSTAGRAM_URL || "https://instagram.com/alanesurmas_lashdesigner";
 const INSTAGRAM_HANDLE = env.VITE_INSTAGRAM_HANDLE || "@alanesurmas_lashdesigner";
@@ -43,7 +50,11 @@ const GOOGLE_MAPS_EMBED = env.VITE_GOOGLE_MAPS_EMBED || "https://maps.google.com
 
 export default function App() {
   const [activeSection, setActiveSection] = useState('inicio');
-  const [scrollProgress, setScrollProgress] = useState(0);
+  const progressRef = useRef(null);
+  // Montagem progressiva: o 1º quadro tem só cabeçalho + hero (aparece rápido no celular);
+  // as demais seções entram uma a uma nos momentos ociosos do navegador, logo em seguida.
+  const [stage, setStage] = useState(0);
+  const allMounted = stage >= SECTION_STAGES;
   const [isScrolled, setIsScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const mobileMenuRef = useRef(null);
@@ -65,8 +76,34 @@ export default function App() {
     };
   }, [mobileMenuOpen]);
 
+  // Logo após o hero aparecer, já baixa (em paralelo) os arquivos das demais seções
+  useEffect(() => {
+    if (stage === 1) [loadResults, loadFeedbacks, loadExperience, loadStudio, loadFooter].forEach((load) => load());
+  }, [stage]);
+
+  useEffect(() => {
+    if (stage >= SECTION_STAGES) return undefined;
+    // A 1ª etapa espera o hero ser pintado; as seguintes, cada uma num momento ocioso
+    let id;
+    const raf = requestAnimationFrame(() => { id = whenIdle(() => setStage((s) => s + 1)); });
+    return () => {
+      cancelAnimationFrame(raf);
+      if (window.cancelIdleCallback && id) window.cancelIdleCallback(id); else clearTimeout(id);
+    };
+  }, [stage]);
+
   // Pétalas do site inteiro: balanço suave e arrastáveis
   useEffect(() => setupInteractivePetals(), []);
+
+  // Pausa as animações CSS das seções longe da tela (classe .is-offscreen no index.css).
+  // Elas retomam sozinhas ao se aproximar; nada muda no que a pessoa vê.
+  useEffect(() => {
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(({ target, isIntersecting }) => target.classList.toggle('is-offscreen', !isIntersecting));
+    }, { rootMargin: '300px 0px' });
+    document.querySelectorAll('main section, body > div section, footer').forEach((el) => observer.observe(el));
+    return () => observer.disconnect();
+  }, [allMounted]);
 
 
   // Lista de Atalhos com IDs 100% correspondentes
@@ -183,9 +220,17 @@ export default function App() {
   };
 
   // Rolagem suave com compensação da barra fixa
-  const scrollToSection = (e, targetId) => {
-    e.preventDefault();
+  const scrollToSection = (e, targetId, attempt = 0) => {
+    e?.preventDefault();
     const element = document.getElementById(targetId);
+    // Clique antes de todas as seções montarem: monta tudo e espera o destino existir
+    // (o arquivo da seção pode ainda estar chegando) antes de calcular a rolagem
+    if (attempt === 0 && !allMounted) setStage(SECTION_STAGES);
+    if ((!element || (attempt === 0 && !allMounted)) && attempt < 150) {
+      // setTimeout (e não requestAnimationFrame): continua funcionando mesmo com a aba em segundo plano
+      setTimeout(() => scrollToSection(null, targetId, attempt + 1), 20);
+      return;
+    }
     if (element) {
       // A faixa de transição no topo da seção é só fundo: rola até onde o conteúdo começa
       const seam = element.querySelector(':scope > .seam-spacer')?.offsetHeight || 0;
@@ -216,7 +261,8 @@ export default function App() {
 
       const totalScrollHeight = document.documentElement.scrollHeight - window.innerHeight;
       const progress = totalScrollHeight > 0 ? (scrollY / totalScrollHeight) * 100 : 0;
-      setScrollProgress(progress);
+      // Direto no estilo: atualizar estado aqui re-renderizava o site inteiro a cada rolagem
+      if (progressRef.current) progressRef.current.style.width = `${progress}%`;
 
       const scrollPosition = scrollY + 160;
       const sectionIds = ['studio', 'feedbacks', 'resultados', 'procedimentos', 'sobre', 'inicio'];
@@ -248,10 +294,16 @@ export default function App() {
       const hash = window.location.hash;
       if (hash) {
         const targetId = hash.replace('#', '');
-        const targetElement = document.getElementById(targetId);
-        if (targetElement) {
-          targetElement.scrollIntoView({ behavior: 'smooth' });
-        }
+        setStage(SECTION_STAGES);
+        // Espera a seção existir (pode estar sendo baixada) e mais um quadro para as de cima montarem
+        let tries = 0;
+        const go = () => {
+          const el = document.getElementById(targetId);
+          if (!el && tries++ < 150) return setTimeout(go, 20);
+          setTimeout(() => el?.scrollIntoView({ behavior: 'smooth' }), 40);
+          return undefined;
+        };
+        go();
       }
     };
 
@@ -263,62 +315,73 @@ export default function App() {
     };
   }, []);
 
-  // GSAP Animations
+  // GSAP Animations: a biblioteca só é baixada depois que todas as seções montaram, para o
+  // ScrollTrigger medir a página uma única vez (medir no meio da montagem gerava tarefas longas)
   useEffect(() => {
-    const ctx = gsap.context(() => {
-      gsap.utils.toArray('.reveal-section').forEach((el) => {
-        gsap.from(el, {
-          scrollTrigger: {
-            trigger: el,
-            start: "top 85%",
-            toggleActions: "play none none none"
-          },
-          opacity: 0,
-          y: 35,
-          duration: 0.9,
-          ease: "power2.out"
+    if (!allMounted) return undefined;
+    let ctx;
+    let cancelled = false;
+    Promise.all([import('gsap'), import('gsap/ScrollTrigger')]).then(([{ default: gsap }, { ScrollTrigger }]) => {
+      if (cancelled) return;
+      gsap.registerPlugin(ScrollTrigger);
+      ctx = gsap.context(() => {
+        gsap.utils.toArray('.reveal-section').forEach((el) => {
+          gsap.from(el, {
+            scrollTrigger: {
+              trigger: el,
+              start: "top 85%",
+              toggleActions: "play none none none"
+            },
+            opacity: 0,
+            y: 35,
+            duration: 0.9,
+            ease: "power2.out"
+          });
         });
-      });
 
-      const aboutElements = gsap.utils.toArray('.about-reveal');
-      if (aboutElements.length > 0) {
-        gsap.fromTo(aboutElements,
-          { opacity: 0, y: 20 },
-          {
-            scrollTrigger: {
-              trigger: '#sobre',
-              start: 'top 72%',
-              toggleActions: 'play none none none'
-            },
-            opacity: 1,
-            y: 0,
-            duration: 0.72,
-            stagger: 0.09,
-            ease: 'power2.out',
-            clearProps: 'opacity,transform'
-          }
-        );
+        const aboutElements = gsap.utils.toArray('.about-reveal');
+        if (aboutElements.length > 0) {
+          gsap.fromTo(aboutElements,
+            { opacity: 0, y: 20 },
+            {
+              scrollTrigger: {
+                trigger: '#sobre',
+                start: 'top 72%',
+                toggleActions: 'play none none none'
+              },
+              opacity: 1,
+              y: 0,
+              duration: 0.72,
+              stagger: 0.09,
+              ease: 'power2.out',
+              clearProps: 'opacity,transform'
+            }
+          );
 
-        gsap.fromTo('.about-visual-stage',
-          { opacity: 0, x: 34 },
-          {
-            scrollTrigger: {
-              trigger: '#sobre',
-              start: 'top 72%',
-              toggleActions: 'play none none none'
-            },
-            opacity: 1,
-            x: 0,
-            duration: 1,
-            ease: 'power3.out',
-            clearProps: 'opacity,transform'
-          }
-        );
-      }
-    }, mainRef);
+          gsap.fromTo('.about-visual-stage',
+            { opacity: 0, x: 34 },
+            {
+              scrollTrigger: {
+                trigger: '#sobre',
+                start: 'top 72%',
+                toggleActions: 'play none none none'
+              },
+              opacity: 1,
+              x: 0,
+              duration: 1,
+              ease: 'power3.out',
+              clearProps: 'opacity,transform'
+            }
+          );
+        }
+      }, mainRef);
+    });
 
-    return () => ctx.revert();
-  }, []);
+    return () => {
+      cancelled = true;
+      ctx?.revert();
+    };
+  }, [allMounted]);
 
   return (
     <div ref={mainRef} className="relative min-h-screen bg-[#F8EFEA] text-[#1D1416] font-sans overflow-x-hidden selection:bg-velvet-800 selection:text-white">
@@ -328,7 +391,8 @@ export default function App() {
       ======================================================== */}
       <div 
         className="fixed top-0 left-0 h-[2.5px] bg-gradient-to-r from-velvet-900 via-rose-500 to-amber-300 z-50 transition-all duration-100 ease-out shadow-sm"
-        style={{ width: `${scrollProgress}%` }}
+        ref={progressRef}
+        style={{ width: '0%' }}
       />
 
       {/* Cabeçalho e hero reproduzidos a partir da referência fornecida. */}
@@ -336,7 +400,7 @@ export default function App() {
         <div className="hero-nav-shell">
           <a href="#inicio" onClick={(e) => scrollToSection(e, 'inicio')} className="hero-brand" aria-label="Alane Surmas — início">
             <img 
-              src="/images/brand/alane-surmas-logo-mark.png" 
+              src="/images/brand/alane-surmas-logo-mark.webp" 
               alt="Alane Surmas" 
               className="hero-brand-mark-img" 
             />
@@ -440,14 +504,14 @@ export default function App() {
 
         {/* Cenário de Pétalas Realistas em Camada de Profundidade */}
         <div className="hero-petals-layer" aria-hidden="true">
-          <img src="/images/cenario/petala-individual-3.png" alt="" className="hero-real-petal hero-petal-1" />
-          <img src="/images/cenario/petala-individual-4.png" alt="" className="hero-real-petal hero-petal-2" />
-          <img src="/images/cenario/petala-individual-5.png" alt="" className="hero-real-petal hero-petal-3" />
-          <img src="/images/cenario/petala-individual-8.png" alt="" className="hero-real-petal hero-petal-4" />
-          <img src="/images/cenario/petala-individual-3.png" alt="" className="hero-real-petal hero-petal-5" />
-          <img src="/images/cenario/petala-individual-8.png" alt="" className="hero-real-petal hero-petal-6" />
-          <img src="/images/cenario/petala-individual-4.png" alt="" className="hero-real-petal hero-petal-7" />
-          <img src="/images/cenario/petala-individual-5.png" alt="" className="hero-real-petal hero-petal-8" />
+          <img src="/images/cenario/petala-individual-3.webp" alt="" className="hero-real-petal hero-petal-1" />
+          <img src="/images/cenario/petala-individual-4.webp" alt="" className="hero-real-petal hero-petal-2" />
+          <img src="/images/cenario/petala-individual-5.webp" alt="" className="hero-real-petal hero-petal-3" />
+          <img src="/images/cenario/petala-individual-8.webp" alt="" className="hero-real-petal hero-petal-4" />
+          <img src="/images/cenario/petala-individual-3.webp" alt="" className="hero-real-petal hero-petal-5" />
+          <img src="/images/cenario/petala-individual-8.webp" alt="" className="hero-real-petal hero-petal-6" />
+          <img src="/images/cenario/petala-individual-4.webp" alt="" className="hero-real-petal hero-petal-7" />
+          <img src="/images/cenario/petala-individual-5.webp" alt="" className="hero-real-petal hero-petal-8" />
         </div>
 
         <div className="hero-copy hero-anim">
@@ -471,10 +535,10 @@ export default function App() {
 
         <div className="hero-showcase">
           <div className="hero-center-stage hero-anim">
-            <img src="/images/cenario/petala-individual-4.png" alt="" className="stage-real-petal stage-petal-one" />
-            <img src="/images/cenario/petala-individual-5.png" alt="" className="stage-real-petal stage-petal-two" />
-            <img src="/images/cenario/petala-individual-8.png" alt="" className="stage-real-petal stage-petal-three" />
-            <img src="/images/cenario/petala-individual-3.png" alt="" className="stage-real-petal stage-petal-four" />
+            <img loading="lazy" decoding="async" src="/images/cenario/petala-individual-4.webp" alt="" className="stage-real-petal stage-petal-one" />
+            <img loading="lazy" decoding="async" src="/images/cenario/petala-individual-5.webp" alt="" className="stage-real-petal stage-petal-two" />
+            <img loading="lazy" decoding="async" src="/images/cenario/petala-individual-8.webp" alt="" className="stage-real-petal stage-petal-three" />
+            <img loading="lazy" decoding="async" src="/images/cenario/petala-individual-3.webp" alt="" className="stage-real-petal stage-petal-four" />
             {/* Pinça Alane Surmas em destaque sobre o pedestal */}
             <HeroTweezer />
           </div>
@@ -485,6 +549,7 @@ export default function App() {
       {/* ========================================================
           3. SEÇÃO SOBRE A ALANE & AUTORIDADE (#sobre)
       ======================================================== */}
+      {stage >= 1 && (
       <section id="sobre" className="about-reference scroll-mt-28 seam-in">
         <div className="seam-spacer" aria-hidden="true" />
         <div className="about-backlight about-backlight-left" />
@@ -493,10 +558,10 @@ export default function App() {
         <div className="about-bokeh about-bokeh-one" />
         <div className="about-bokeh about-bokeh-two" />
         <div className="about-bokeh about-bokeh-three" />
-        <img src="/images/cenario/petala-individual-3.png" alt="" className="about-edge-petal about-edge-petal-a" aria-hidden="true" />
-        <img src="/images/cenario/petala-individual-1.png" alt="" className="about-edge-petal about-edge-petal-b" aria-hidden="true" />
-        <img src="/images/cenario/petala-individual-8.png" alt="" className="about-edge-petal about-edge-petal-c" aria-hidden="true" />
-        <img src="/images/cenario/petala-individual-6.png" alt="" className="about-edge-petal about-edge-petal-d" aria-hidden="true" />
+        <img loading="lazy" decoding="async" src="/images/cenario/petala-individual-3.webp" alt="" className="about-edge-petal about-edge-petal-a" aria-hidden="true" />
+        <img loading="lazy" decoding="async" src="/images/cenario/petala-individual-1.webp" alt="" className="about-edge-petal about-edge-petal-b" aria-hidden="true" />
+        <img loading="lazy" decoding="async" src="/images/cenario/petala-individual-8.webp" alt="" className="about-edge-petal about-edge-petal-c" aria-hidden="true" />
+        <img loading="lazy" decoding="async" src="/images/cenario/petala-individual-6.webp" alt="" className="about-edge-petal about-edge-petal-d" aria-hidden="true" />
 
         <div className="about-layout">
           <div className="about-left">
@@ -552,12 +617,12 @@ export default function App() {
             <div className="about-ribbon about-ribbon-back"><span /></div>
 
             {/* Pétalas Reais Fotográficas 3D ao redor do Card */}
-            <img src="/images/cenario/petala-individual-3.png" alt="" className="about-real-petal about-petal-one" aria-hidden="true" />
-            <img src="/images/cenario/petala-individual-2.png" alt="" className="about-real-petal about-petal-two" aria-hidden="true" />
-            <img src="/images/cenario/petala-individual-7.png" alt="" className="about-real-petal about-petal-three" aria-hidden="true" />
-            <img src="/images/cenario/petala-individual-8.png" alt="" className="about-real-petal about-petal-four" aria-hidden="true" />
-            <img src="/images/cenario/petala-individual-5.png" alt="" className="about-real-petal about-petal-five" aria-hidden="true" />
-            <img src="/images/cenario/petala-individual-1.png" alt="" className="about-real-petal about-petal-six" aria-hidden="true" />
+            <img loading="lazy" decoding="async" src="/images/cenario/petala-individual-3.webp" alt="" className="about-real-petal about-petal-one" aria-hidden="true" />
+            <img loading="lazy" decoding="async" src="/images/cenario/petala-individual-2.webp" alt="" className="about-real-petal about-petal-two" aria-hidden="true" />
+            <img loading="lazy" decoding="async" src="/images/cenario/petala-individual-7.webp" alt="" className="about-real-petal about-petal-three" aria-hidden="true" />
+            <img loading="lazy" decoding="async" src="/images/cenario/petala-individual-8.webp" alt="" className="about-real-petal about-petal-four" aria-hidden="true" />
+            <img loading="lazy" decoding="async" src="/images/cenario/petala-individual-5.webp" alt="" className="about-real-petal about-petal-five" aria-hidden="true" />
+            <img loading="lazy" decoding="async" src="/images/cenario/petala-individual-1.webp" alt="" className="about-real-petal about-petal-six" aria-hidden="true" />
 
             <div
               className="about-photo-frame"
@@ -567,7 +632,7 @@ export default function App() {
             >
               <div className="about-frame-shine" />
               <div className="about-frame-light" aria-hidden="true" />
-              <img src="/images/editorial/alane-editorial-carmim.jpg" alt="Alane Surmas - Fundadora & Master Lash Designer" />
+              <img loading="lazy" decoding="async" src="/images/editorial/alane-editorial-carmim.webp" alt="Alane Surmas - Fundadora & Master Lash Designer" />
 
               <div className="about-master-badge"><Crown aria-hidden="true" /><span>MASTER LASH &amp; BROW</span></div>
 
@@ -591,10 +656,12 @@ export default function App() {
         </div>
         <div className="seam-spacer" aria-hidden="true" />
       </section>
+      )}
 
       {/* ========================================================
           4. SEÇÃO PROCEDIMENTOS OFICIAIS COMPLETOS (#procedimentos)
       ======================================================== */}
+      {stage >= 2 && (
       <section id="procedimentos" className="procedures-reference scroll-mt-28 seam-in">
         <div className="seam-spacer" aria-hidden="true" />
         <div className="procedures-ambient" aria-hidden="true">
@@ -603,15 +670,15 @@ export default function App() {
           
           {/* Cenário Lateral — Fitas de Vidro 3D e Bokeh Cristalino */}
           <div className="procedures-decor-left">
-            <img
-              src="/images/cenario/fita-vidro3-transparente.png"
+            <img loading="lazy" decoding="async"
+              src="/images/cenario/fita-vidro3-transparente.webp"
               alt=""
               className="procedures-ribbon-image procedures-ribbon-image-left"
             />
           </div>
           <div className="procedures-decor-right">
-            <img
-              src="/images/cenario/fita-vidro3-transparente.png"
+            <img loading="lazy" decoding="async"
+              src="/images/cenario/fita-vidro3-transparente.webp"
               alt=""
               className="procedures-ribbon-image procedures-ribbon-image-right"
             />
@@ -640,8 +707,11 @@ export default function App() {
                     <div className="procedure-media">
                       <img
                         src={proc.imagem}
+                        srcSet={`${proc.imagem.replace('.webp', '-640.webp')} 640w, ${proc.imagem.replace('.webp', '-960.webp')} 960w, ${proc.imagem} 1280w`}
+                        sizes="(max-width: 700px) 92vw, (max-width: 1024px) 46vw, 440px"
                         alt={`Capa publicitária do procedimento ${proc.nome}`}
                         loading="lazy"
+                        decoding="async"
                         style={{ objectPosition: proc.imagemPosicao }}
                       />
                       <div className="procedure-media-tint" />
@@ -678,39 +748,44 @@ export default function App() {
         </div>
         <div className="seam-spacer" aria-hidden="true" />
       </section>
+      )}
 
-      <ResultsSection instagramUrl={INSTAGRAM_URL} instagramHandle={INSTAGRAM_HANDLE} />
+      {stage >= 3 && <Suspense fallback={null}><ResultsSection instagramUrl={INSTAGRAM_URL} instagramHandle={INSTAGRAM_HANDLE} /></Suspense>}
 
 
       {/* ========================================================
           6. SEÇÃO FEEDBACKS & PROVA SOCIAL (#feedbacks e #depoimentos)
       ======================================================== */}
-      <FeedbacksSection depoimentos={depoimentos} />
+      {stage >= 4 && <Suspense fallback={null}><FeedbacksSection depoimentos={depoimentos} /></Suspense>}
 
       {/* ========================================================
           7. SEÇÃO EXPERIÊNCIA EXCLUSIVA (#experiencia)
       ======================================================== */}
-      <ExperienceSection onSchedule={openWhatsApp} />
+      {stage >= 5 && <Suspense fallback={null}><ExperienceSection onSchedule={openWhatsApp} /></Suspense>}
 
       {/* ========================================================
           8. LOCALIZAÇÃO E ESPAÇO FÍSICO — GUARANIAÇU & DIAMANTE DO SUL (#studio)
       ======================================================== */}
-      <StudioSection onSchedule={openWhatsApp} mapsUrl={GOOGLE_MAPS_URL} mapsEmbed={GOOGLE_MAPS_EMBED} />
+      {stage >= 6 && <Suspense fallback={null}><StudioSection onSchedule={openWhatsApp} mapsUrl={GOOGLE_MAPS_URL} mapsEmbed={GOOGLE_MAPS_EMBED} /></Suspense>}
       {/* ========================================================
           9. FOOTER (100% RESPONSIVO, SEM CORTES E COM RESPIRO INFERIOR)
       ======================================================== */}
-      <SiteFooter
+      {stage >= 7 && (
+      <Suspense fallback={null}>
+        <SiteFooter
         onNavigate={scrollToSection}
         onSchedule={openWhatsApp}
         instagramUrl={INSTAGRAM_URL}
         mapsUrl={GOOGLE_MAPS_URL}
       />
+        </Suspense>
+      )}
 
       {/* ========================================================
           10. BOTÃO FLUTUANTE DE WHATSAPP PERSISTENTE
       ======================================================== */}
       {/* Rosa premium que cai pela tela de tempos em tempos */}
-      <PremiumRose />
+      <Suspense fallback={null}><PremiumRose /></Suspense>
 
       <aside aria-label="Atendimento rápido no WhatsApp" className="wa-float">
         <div className="wa-float-label">

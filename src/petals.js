@@ -37,16 +37,24 @@ function pseudo(i, k) {
  * mantêm a chuva constante, sem todas caírem juntas.
  */
 function setupFall(reduceMotion) {
-  document.querySelectorAll(PETAL_SELECTOR).forEach((petal, index) => {
-    petal.draggable = false;
-    if (reduceMotion) return;
+  const petals = [...document.querySelectorAll(PETAL_SELECTOR)];
+  // 1) Só leituras (offsetTop/offsetHeight): o layout é calculado uma única vez.
+  //    Intercalar leitura e escrita por pétala forçava um recálculo de layout para cada uma.
+  const measures = petals.map((petal) => {
+    if (reduceMotion) return null;
     const section = petal.closest('section, footer');
-    if (!section) return;
+    if (!section) return null;
     const top = offsetWithin(petal, section);
-    if (top === null) return;
-    const h = petal.offsetHeight || 60;
-    petal.style.setProperty('--fall-start', `${-(top + h + 60)}px`);
-    petal.style.setProperty('--fall-end', `${section.offsetHeight - top + 60}px`);
+    if (top === null) return null;
+    return { top, h: petal.offsetHeight || 60, sectionH: section.offsetHeight };
+  });
+  // 2) Só escritas
+  petals.forEach((petal, index) => {
+    petal.draggable = false;
+    const m = measures[index];
+    if (!m) return;
+    petal.style.setProperty('--fall-start', `${-(m.top + m.h + 60)}px`);
+    petal.style.setProperty('--fall-end', `${m.sectionH - m.top + 60}px`);
     if (!petal.dataset.petalReady) {
       petal.dataset.petalReady = '1';
       const dur = 10 + pseudo(index, 1) * 9;
@@ -144,9 +152,24 @@ export function setupInteractivePetals() {
     queued = requestAnimationFrame(() => setupFall(reduceMotion));
   };
   refresh();
-  // Seções carregadas depois (lazy) e mudanças de tamanho recalculam a altura da queda
-  const observer = new MutationObserver(refresh);
+  // Recalcula só quando importa: pétalas novas no DOM (seções que montam depois) ou
+  // mudança real de altura das seções. Antes, qualquer troca no DOM (ex.: o rodízio de
+  // fotos dos cards a cada 6 s) refazia tudo.
+  const hasPetal = (node) => node.nodeType === 1 && (isPetal(node) || node.querySelector?.(PETAL_SELECTOR));
+  const observer = new MutationObserver((records) => {
+    if (records.some((r) => [...r.addedNodes].some(hasPetal))) refresh();
+  });
   observer.observe(document.body, { childList: true, subtree: true });
+  const heights = new WeakMap();
+  const resizeObserver = new ResizeObserver((entries) => {
+    let changed = false;
+    entries.forEach(({ target, contentRect }) => {
+      if (heights.get(target) !== Math.round(contentRect.height)) changed = true;
+      heights.set(target, Math.round(contentRect.height));
+    });
+    if (changed) refresh();
+  });
+  document.querySelectorAll('section, footer').forEach((el) => resizeObserver.observe(el));
   window.addEventListener('resize', refresh);
   window.addEventListener('load', refresh);
 
@@ -160,6 +183,7 @@ export function setupInteractivePetals() {
   return () => {
     cancelAnimationFrame(queued);
     observer.disconnect();
+    resizeObserver.disconnect();
     window.removeEventListener('resize', refresh);
     window.removeEventListener('load', refresh);
     document.removeEventListener('pointerdown', onPointerDown, true);

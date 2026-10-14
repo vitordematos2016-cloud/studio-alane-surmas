@@ -64,8 +64,8 @@ export default function SiteFooter({ onNavigate, onSchedule, instagramUrl, mapsU
       <div className="ft-bg" aria-hidden="true">
         <span className="ft-top-line" />
         <span className="ft-sparkles" />
-        <img src="/images/cenario/fita-vidro3-transparente.png" alt="" className="ft-ribbon ft-ribbon-left" />
-        <img src="/images/cenario/fita-vidro3-transparente.png" alt="" className="ft-ribbon ft-ribbon-right" />
+        <img loading="lazy" decoding="async" src="/images/cenario/fita-vidro3-transparente.webp" alt="" className="ft-ribbon ft-ribbon-left" />
+        <img loading="lazy" decoding="async" src="/images/cenario/fita-vidro3-transparente.webp" alt="" className="ft-ribbon ft-ribbon-right" />
       </div>
 
       <div className="ft-inner">
@@ -74,7 +74,7 @@ export default function SiteFooter({ onNavigate, onSchedule, instagramUrl, mapsU
           <div className="ft-brand">
             <div className="ft-brand-row">
               <span className="ft-logo">
-                <img src="/images/brand/alane-surmas-logo-mark.png" alt="Logo Alane Surmas" width="391" height="391" />
+                <img loading="lazy" decoding="async" src="/images/brand/alane-surmas-logo-mark.webp" alt="Logo Alane Surmas" width="391" height="391" />
               </span>
               <span className="ft-name">
                 <strong>ALANE SURMAS</strong>
@@ -190,7 +190,7 @@ export default function SiteFooter({ onNavigate, onSchedule, instagramUrl, mapsU
         <div className="ft-dev">
           <span>DESENVOLVIDO POR</span>
           <a href={DEVELOPER_URL} target="_blank" rel="noopener noreferrer" title="Falar com Matos Soluções no WhatsApp">
-            <img src="/images/brand/logo-matos-solucoes-transparent.png" alt="Matos Soluções" />
+            <img loading="lazy" decoding="async" src="/images/brand/logo-matos-solucoes-transparent.webp" alt="Matos Soluções" />
           </a>
         </div>
       </div>

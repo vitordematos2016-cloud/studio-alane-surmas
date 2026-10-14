@@ -46,20 +46,30 @@ Thumbs.db
 
 # Marca
 !/public/images/brand/alane-surmas-logo-mark.png
+!/public/images/brand/alane-surmas-logo-mark.webp
 !/public/images/brand/logo-matos-solucoes-transparent.png
+!/public/images/brand/logo-matos-solucoes-transparent.webp
 
 # Hero
 !/public/images/hero/pinca-alane.webp
+!/public/images/hero/pinca-alane-640.webp
+!/public/images/hero/pinca-alane-960.webp
 
 # Cenário (pétalas, fitas, rosas)
 !/public/images/cenario/petala-individual-*.png
+!/public/images/cenario/petala-individual-*.webp
+!/public/images/cenario/ruido-grao.webp
 !/public/images/cenario/fita-vidro3-transparente.png
+!/public/images/cenario/fita-vidro3-transparente.webp
 !/public/images/cenario/rosa3-transparente.png
+!/public/images/cenario/rosa3-transparente.webp
 !/public/images/cenario/rosa-rosa-queda.webp
 !/public/images/cenario/lash-macro-procedure.jpg
+!/public/images/cenario/lash-macro-procedure.webp
 
 # Sobre
 !/public/images/editorial/alane-editorial-carmim.jpg
+!/public/images/editorial/alane-editorial-carmim.webp
 
 # Procedimentos
 !/public/assets/procedimentos/capas/*.webp
@@ -67,7 +77,9 @@ Thumbs.db
 # Resultados (fotos reais sem moldura + miniaturas; os originais com etiqueta ficam só locais)
 !/public/assets/resultados/*.webp
 !/public/assets/resultados/thumbs/*.webp
+!/public/assets/resultados/480/*.webp
 !/public/images/secao-resultados/instagram/icone-instagram-flores.png
+!/public/images/secao-resultados/instagram/icone-instagram-flores.webp
 !/public/images/secao-resultados/instagram/thumb-insta-0[1-5].jpg
 
 # Feedbacks
