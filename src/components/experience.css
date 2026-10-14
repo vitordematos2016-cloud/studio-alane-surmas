@@ -1,0 +1,1294 @@
+/* ========================================================
+   SEÇÃO EXPERIÊNCIA EXCLUSIVA — PINK CRYSTAL LUXURY GLASSMORPHISM 3D
+   Desktop: "u" = 1px da referência no painel (1290 × 727).
+   Coluna da foto: "v" = 1px da referência na moldura (532 × 583), em qualquer tela.
+   ======================================================== */
+
+.xp-section {
+  --xp-ink: #2a1219;
+  --xp-wine: #850b35;
+  --xp-wine-deep: #4d1027;
+  --xp-pink: #e94383;
+  --xp-text: #5c3a46;
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  padding: 48px 14px 56px;
+  color: var(--xp-ink);
+  background:
+    radial-gradient(ellipse 48% 55% at 50% 48%, #fff7fa 0%, rgba(251, 228, 236, .9) 50%, transparent 80%),
+    radial-gradient(ellipse 30% 60% at 0% 55%, rgba(242, 150, 182, .42), transparent 72%),
+    radial-gradient(ellipse 30% 60% at 100% 45%, rgba(242, 150, 182, .42), transparent 72%),
+    linear-gradient(180deg, #fbe4ec 0%, #f9d8e3 60%, #f7cddb 100%);
+}
+
+/* ---------- Cenário ---------- */
+
+.xp-backdrop {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.xp-sparkles {
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(circle at 12% 18%, #fff 0 1.3px, transparent 2.5px),
+    radial-gradient(circle at 31% 92%, rgba(255, 255, 255, .9) 0 1.1px, transparent 2.3px),
+    radial-gradient(circle at 58% 6%, #fff 0 1.2px, transparent 2.4px),
+    radial-gradient(circle at 88% 22%, #fff 0 1.4px, transparent 2.7px),
+    radial-gradient(circle at 94% 70%, rgba(255, 255, 255, .9) 0 1.2px, transparent 2.4px),
+    radial-gradient(circle at 6% 74%, #fff 0 1.1px, transparent 2.3px);
+  animation: xp-twinkle 6s ease-in-out infinite;
+}
+
+.xp-side-ribbon {
+  position: absolute;
+  top: 6%;
+  height: 92%;
+  aspect-ratio: 1;
+  object-fit: contain;
+  opacity: .9;
+  mix-blend-mode: screen;
+  -webkit-mask-image: linear-gradient(180deg, transparent 0%, #000 14%, #000 84%, transparent 100%);
+  mask-image: linear-gradient(180deg, transparent 0%, #000 14%, #000 84%, transparent 100%);
+}
+
+.xp-side-ribbon-left {
+  left: 0;
+  transform: translateX(-44%) scaleX(.42);
+  animation: xp-drift-a 15s ease-in-out infinite;
+}
+
+.xp-side-ribbon-right {
+  right: 0;
+  transform: translateX(44%) scaleX(-.42);
+  animation: xp-drift-b 17s ease-in-out infinite;
+}
+
+.xp-petal {
+  position: absolute;
+  width: calc(var(--w) * .7px);
+  filter: blur(var(--blur)) drop-shadow(0 10px 14px rgba(150, 20, 60, .16));
+  transform: rotate(var(--r));
+  animation: xp-petal-float 11s ease-in-out var(--delay) infinite;
+}
+
+/* ---------- Painel de vidro ---------- */
+
+.xp-wrap {
+  position: relative;
+  width: min(100%, 640px);
+  margin: 0 auto;
+}
+
+.xp-panel {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 18px;
+  padding: 30px 18px 34px;
+  border-radius: 32px;
+  text-align: center;
+  background: linear-gradient(150deg, rgba(255, 255, 255, .8) 0%, rgba(255, 246, 249, .66) 46%, rgba(255, 238, 244, .72) 100%);
+  border: 1.5px solid rgba(255, 255, 255, .95);
+  box-shadow:
+    inset 0 1px 0 #fff,
+    inset 0 0 0 4px rgba(255, 214, 227, .25),
+    inset 0 -20px 40px rgba(255, 200, 218, .22),
+    0 30px 70px -24px rgba(176, 34, 84, .32),
+    0 0 50px rgba(255, 160, 192, .25);
+  -webkit-backdrop-filter: blur(16px) saturate(1.1);
+  backdrop-filter: blur(16px) saturate(1.1);
+}
+
+.xp-panel::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background:
+    linear-gradient(120deg, rgba(255, 255, 255, .55) 0%, transparent 26%),
+    linear-gradient(300deg, rgba(255, 196, 216, .3) 0%, transparent 22%);
+  pointer-events: none;
+}
+
+.xp-panel-sparkle {
+  position: absolute;
+  top: 26px;
+  right: 30px;
+  width: 18px;
+  height: 18px;
+  color: #f27aa6;
+  filter: drop-shadow(0 0 6px rgba(240, 96, 154, .5));
+  animation: xp-sparkle 3.8s ease-in-out infinite;
+}
+
+/* Os filhos de .xp-copy participam direto do layout do painel */
+.xp-copy {
+  display: contents;
+}
+
+/* ---------- Texto ---------- */
+
+.xp-kicker {
+  order: 1;
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 7px 14px;
+  border: 1px solid rgba(233, 67, 131, .28);
+  border-radius: 999px;
+  color: var(--xp-wine);
+  background: linear-gradient(180deg, rgba(255, 236, 243, .95), rgba(253, 222, 233, .8));
+  box-shadow: inset 0 1px rgba(255, 255, 255, .9);
+  font-family: "Plus Jakarta Sans", sans-serif;
+  font-size: clamp(8px, 2.3vw, 9.5px);
+  font-weight: 700;
+  letter-spacing: .1em;
+  white-space: nowrap;
+}
+
+.xp-kicker svg {
+  width: 1.25em;
+  height: 1.25em;
+  color: var(--xp-pink);
+}
+
+.xp-title {
+  order: 2;
+  position: relative;
+  margin: 0;
+  font-weight: 400;
+}
+
+.xp-title-serif {
+  display: block;
+  color: var(--xp-ink);
+  font-family: "Playfair Display", Georgia, serif;
+  font-size: clamp(27px, 7.4vw, 36px);
+  line-height: 1.04;
+  letter-spacing: -.012em;
+  text-wrap: balance;
+}
+
+/* Padding generoso compensado por margem: o degradê só pinta dentro da caixa e os
+   traços altos da fonte manuscrita ("l", "d", acento) eram cortados no topo */
+.xp-title-script {
+  position: relative;
+  display: inline-block;
+  margin-top: calc(2px - .3em);
+  padding: .3em .12em .1em;
+  color: var(--xp-pink);
+  font-family: "Pinyon Script", cursive;
+  font-size: clamp(38px, 10.5vw, 54px);
+  line-height: 1.05;
+  white-space: nowrap;
+  background:
+    linear-gradient(100deg, transparent 38%, rgba(255, 255, 255, .95) 48%, #ffe3ee 51%, transparent 61%) no-repeat,
+    linear-gradient(100deg, #df2f72 0%, #f0548c 50%, #dc2f6d 100%);
+  background-size: 260% 100%, 100% 100%;
+  background-position: 160% 0, 0 0;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: xp-text-shine 6s cubic-bezier(.45, .05, .55, .95) 1.2s infinite;
+}
+
+.xp-title-heart {
+  display: inline-block;
+  width: .7em;
+  height: .44em;
+  margin-left: .02em;
+  color: var(--xp-pink);
+  vertical-align: -.02em;
+  overflow: visible;
+  filter: drop-shadow(0 0 4px rgba(233, 67, 131, .35));
+}
+
+.xp-ornament {
+  order: 3;
+  display: block;
+  width: min(300px, 80%);
+  height: 14px;
+  overflow: visible;
+}
+
+.xp-description {
+  order: 4;
+  margin: 0;
+  color: var(--xp-text);
+  font-family: "Plus Jakarta Sans", sans-serif;
+  font-size: 13.5px;
+  line-height: 1.5;
+}
+
+.xp-desktop-break {
+  display: none;
+}
+
+/* ---------- Cards ---------- */
+
+.xp-cards {
+  order: 6;
+  display: grid;
+  width: 100%;
+  gap: 12px;
+}
+
+.xp-card {
+  position: relative;
+  display: grid;
+  grid-template-columns: auto 1fr;
+  grid-template-rows: auto auto;
+  column-gap: 14px;
+  align-items: center;
+  padding: 14px 16px;
+  border-radius: 20px;
+  text-align: left;
+  background: linear-gradient(160deg, rgba(255, 255, 255, .88), rgba(255, 244, 248, .7));
+  border: 1.5px solid rgba(255, 255, 255, .95);
+  box-shadow:
+    inset 0 0 0 3px rgba(255, 210, 225, .25),
+    0 0 0 1px rgba(246, 170, 198, .3),
+    0 14px 30px -14px rgba(176, 34, 84, .28);
+  transition: translate .35s ease, box-shadow .35s ease;
+}
+
+.xp-card::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: linear-gradient(125deg, rgba(255, 255, 255, .7) 0%, transparent 26%);
+  opacity: .6;
+  pointer-events: none;
+  transition: opacity .35s ease;
+}
+
+.xp-card:hover {
+  translate: 0 -4px;
+  box-shadow:
+    inset 0 0 0 3px rgba(255, 210, 225, .35),
+    0 0 0 1px rgba(246, 150, 184, .5),
+    0 20px 36px -14px rgba(176, 34, 84, .36),
+    0 0 22px rgba(255, 150, 186, .3);
+}
+
+.xp-card:hover::after {
+  opacity: 1;
+}
+
+.xp-card-icon {
+  grid-row: span 2;
+  display: grid;
+  width: 52px;
+  height: 52px;
+  place-items: center;
+  border-radius: 50%;
+  color: var(--xp-wine);
+  background:
+    radial-gradient(circle at 34% 28%, #fff 0 10%, rgba(255, 255, 255, 0) 38%),
+    radial-gradient(circle at 50% 60%, #f9b6cc 0%, #f290b2 70%, #ec7aa3 100%);
+  box-shadow: inset 0 -4px 8px rgba(214, 60, 112, .35), inset 0 2px 3px rgba(255, 255, 255, .8), 0 8px 16px rgba(233, 67, 131, .25);
+}
+
+.xp-card-icon svg {
+  width: 46%;
+  height: 46%;
+  stroke-width: 1.8;
+}
+
+.xp-card h3 {
+  margin: 0;
+  color: var(--xp-ink);
+  font-family: "Plus Jakarta Sans", sans-serif;
+  font-size: 12.5px;
+  font-weight: 700;
+  letter-spacing: .02em;
+}
+
+.xp-card p {
+  margin: 3px 0 0;
+  color: var(--xp-text);
+  font-family: "Plus Jakarta Sans", sans-serif;
+  font-size: 12px;
+  line-height: 1.38;
+}
+
+/* ---------- Ações ---------- */
+
+.xp-actions {
+  order: 7;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+  width: 100%;
+}
+
+.xp-cta {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  width: min(320px, 100%);
+  min-height: 62px;
+  padding: 0 14px 0 26px;
+  overflow: hidden;
+  border: 1px solid rgba(255, 160, 192, .45);
+  border-radius: 999px;
+  color: #fff;
+  background:
+    radial-gradient(ellipse 60% 80% at 30% 0%, rgba(255, 140, 180, .45), transparent 70%),
+    linear-gradient(150deg, #a3164a 0%, #850b35 45%, #5e0a28 100%);
+  box-shadow:
+    inset 0 1px 1px rgba(255, 255, 255, .35),
+    inset 0 -6px 14px rgba(40, 0, 14, .35),
+    0 14px 28px -8px rgba(133, 11, 53, .5),
+    0 0 26px rgba(233, 67, 131, .28);
+  cursor: pointer;
+  text-align: left;
+}
+
+/* Reflexo que atravessa o botão no hover */
+.xp-cta::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: -40%;
+  width: 30%;
+  background: linear-gradient(100deg, transparent, rgba(255, 255, 255, .35), transparent);
+  transform: skewX(-18deg);
+  transition: left .8s ease;
+}
+
+.xp-cta:hover::before {
+  left: 120%;
+}
+
+.xp-cta:focus-visible {
+  outline: 2px solid var(--xp-wine);
+  outline-offset: 3px;
+}
+
+.xp-cta-calendar {
+  flex: 0 0 auto;
+  width: 22px;
+  height: 22px;
+}
+
+.xp-cta-text {
+  flex: 1;
+  font-family: "Plus Jakarta Sans", sans-serif;
+  font-size: 12.5px;
+  font-weight: 700;
+  letter-spacing: .08em;
+  line-height: 1.25;
+  white-space: nowrap;
+}
+
+.xp-cta-arrow {
+  display: grid;
+  flex: 0 0 auto;
+  width: 34px;
+  height: 34px;
+  place-items: center;
+  border-radius: 50%;
+  background: linear-gradient(160deg, #c22a5f, #8f1240);
+  box-shadow: inset 0 1px rgba(255, 255, 255, .3), 0 3px 8px rgba(40, 0, 14, .3);
+}
+
+.xp-cta-arrow svg {
+  width: 16px;
+  height: 16px;
+  transition: transform .3s ease;
+}
+
+.xp-cta:hover .xp-cta-arrow svg {
+  transform: translateX(3px);
+}
+
+.xp-rating {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 6px 10px;
+  margin: 0;
+  color: var(--xp-ink);
+  font-family: "Plus Jakarta Sans", sans-serif;
+  font-size: 12.5px;
+  font-weight: 600;
+}
+
+.xp-stars {
+  display: inline-flex;
+  gap: 1px;
+}
+
+.xp-stars svg {
+  width: 15px;
+  height: 15px;
+  color: #f2b01e;
+  fill: #f6bd2b;
+  filter: drop-shadow(0 1px 1px rgba(160, 100, 0, .3));
+}
+
+/* ---------- Fotografia, moldura e selos (em "v") ---------- */
+
+.xp-visual {
+  order: 5;
+  position: relative;
+  container-type: inline-size;
+  width: min(420px, 86%);
+  aspect-ratio: 532 / 583;
+  margin: 18px auto 26px;
+}
+
+/* cqw nos filhos se refere à própria .xp-visual (container): 1 "vv" = 1px da moldura da referência */
+.xp-visual>* {
+  --vv: calc(100cqw / 532);
+}
+
+.xp-visual-glow {
+  position: absolute;
+  inset: -8%;
+  z-index: 0;
+  border-radius: 50%;
+  background: radial-gradient(closest-side, rgba(255, 140, 180, .38), transparent);
+  filter: blur(18px);
+}
+
+.xp-frame {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  padding: calc(18 * var(--vv));
+  border-radius: calc(44 * var(--vv));
+  background: linear-gradient(150deg, rgba(255, 255, 255, .82) 0%, rgba(255, 210, 225, .5) 30%, rgba(250, 170, 200, .45) 65%, rgba(255, 232, 240, .78) 100%);
+  box-shadow:
+    inset 0 0 0 1.5px rgba(255, 255, 255, .95),
+    inset 0 0 0 calc(5 * var(--vv)) rgba(255, 180, 206, .3),
+    inset 0 0 calc(24 * var(--vv)) rgba(255, 255, 255, .75),
+    inset 0 calc(-12 * var(--vv)) calc(26 * var(--vv)) rgba(233, 67, 131, .25),
+    0 calc(30 * var(--vv)) calc(56 * var(--vv)) calc(-16 * var(--vv)) rgba(176, 34, 84, .4),
+    0 0 calc(40 * var(--vv)) rgba(255, 130, 175, .45);
+  -webkit-backdrop-filter: blur(6px) saturate(1.2);
+  backdrop-filter: blur(6px) saturate(1.2);
+}
+
+/* Arestas espelhadas do cristal (só na borda, sem cobrir a foto) */
+.xp-frame::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  padding: calc(18 * var(--vv));
+  border-radius: inherit;
+  background:
+    linear-gradient(135deg, rgba(255, 255, 255, .98) 0%, rgba(255, 255, 255, 0) 22%),
+    linear-gradient(315deg, rgba(255, 255, 255, .85) 0%, rgba(255, 255, 255, 0) 16%),
+    linear-gradient(90deg, rgba(255, 255, 255, .5), rgba(255, 255, 255, 0) 8%, rgba(255, 255, 255, 0) 92%, rgba(255, 255, 255, .5));
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask: linear-gradient(#000 0 0) content-box exclude, linear-gradient(#000 0 0);
+  pointer-events: none;
+}
+
+/* Luz discreta que percorre a moldura */
+@property --xp-frame-angle {
+  syntax: "<angle>";
+  initial-value: 0deg;
+  inherits: false;
+}
+
+.xp-frame::after {
+  content: "";
+  position: absolute;
+  inset: -1px;
+  z-index: 3;
+  padding: 2px;
+  border-radius: inherit;
+  background: conic-gradient(from var(--xp-frame-angle), transparent 0deg, transparent 250deg, rgba(255, 160, 195, .5) 310deg, #fff 345deg, transparent 355deg);
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask: linear-gradient(#000 0 0) content-box exclude, linear-gradient(#000 0 0);
+  pointer-events: none;
+  animation: xp-frame-run 9s linear infinite;
+}
+
+.xp-photo {
+  position: relative;
+  height: 100%;
+  overflow: hidden;
+  border-radius: calc(30 * var(--vv));
+  background: #e9b6c2;
+  box-shadow: 0 0 0 1px rgba(255, 255, 255, .7);
+}
+
+.xp-photo img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: 60% 50%;
+}
+
+/* Gradiente vinho na base para a frase ficar legível */
+.xp-photo::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(0deg, rgba(77, 16, 39, .72) 0%, rgba(77, 16, 39, .38) 26%, rgba(77, 16, 39, 0) 46%),
+    linear-gradient(118deg, rgba(255, 255, 255, .16) 0%, rgba(255, 255, 255, 0) 20%);
+  pointer-events: none;
+}
+
+.xp-badge-result,
+.xp-badge-excellence {
+  position: absolute;
+  z-index: 5;
+  display: inline-flex;
+  align-items: center;
+  gap: calc(7 * var(--vv));
+  border-radius: 999px;
+  color: #fff;
+  font-family: "Plus Jakarta Sans", sans-serif;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.xp-badge-result {
+  top: calc(41 * var(--vv));
+  left: calc(33 * var(--vv));
+  height: max(23px, calc(29 * var(--vv)));
+  padding: 0 max(10px, calc(15 * var(--vv))) 0 max(8px, calc(12 * var(--vv)));
+  background: rgba(70, 14, 34, .72);
+  border: 1px solid rgba(255, 255, 255, .18);
+  box-shadow: 0 4px 12px rgba(40, 0, 14, .3);
+  -webkit-backdrop-filter: blur(8px);
+  backdrop-filter: blur(8px);
+  font-size: max(8.5px, calc(10.8 * var(--vv)));
+  letter-spacing: .02em;
+}
+
+/* Foto estreita (celular): os dois selos não cabem lado a lado, então ficam em degrau */
+@container (max-width: 460px) {
+  .xp-badge-result {
+    top: calc(32 * var(--vv) + 30px);
+  }
+}
+
+.xp-badge-result svg {
+  width: calc(14 * var(--vv));
+  height: calc(14 * var(--vv));
+  color: #ff9cc0;
+}
+
+.xp-badge-excellence {
+  top: calc(32 * var(--vv));
+  right: calc(37 * var(--vv));
+  height: max(23px, calc(30 * var(--vv)));
+  padding: 0 max(10px, calc(16 * var(--vv))) 0 max(8px, calc(13 * var(--vv)));
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, .18), rgba(255, 255, 255, 0) 55%),
+    linear-gradient(160deg, #9b1443, #6e0c2e);
+  border: 1px solid rgba(255, 170, 200, .45);
+  box-shadow: 0 6px 14px rgba(90, 10, 40, .35);
+  font-size: max(8.5px, calc(11.5 * var(--vv)));
+  letter-spacing: .06em;
+}
+
+.xp-badge-excellence svg {
+  width: calc(15 * var(--vv));
+  height: calc(15 * var(--vv));
+  color: #f6c344;
+}
+
+.xp-photo-quote {
+  position: absolute;
+  z-index: 5;
+  left: calc(58 * var(--vv));
+  top: calc(440 * var(--vv));
+  margin: 0;
+  color: #fff6f9;
+  font-family: "Cormorant Garamond", Georgia, serif;
+  font-size: max(15px, calc(22.5 * var(--vv)));
+  font-style: italic;
+  line-height: 1.28;
+  text-align: left;
+  text-shadow: 0 2px 10px rgba(60, 0, 20, .45);
+}
+
+.xp-badge-isolation {
+  position: absolute;
+  z-index: 5;
+  left: calc(28 * var(--vv));
+  top: calc(515 * var(--vv));
+  display: flex;
+  align-items: center;
+  gap: calc(12 * var(--vv));
+  width: auto;
+  height: max(42px, calc(54 * var(--vv)));
+  padding: 0 max(12px, calc(16 * var(--vv))) 0 max(8px, calc(13 * var(--vv)));
+  border-radius: calc(27 * var(--vv));
+  text-align: left;
+  background: linear-gradient(165deg, rgba(255, 255, 255, .97), rgba(255, 246, 249, .9));
+  border: 1px solid rgba(255, 255, 255, .95);
+  box-shadow: 0 0 0 1px rgba(246, 170, 198, .35), 0 10px 22px rgba(120, 20, 50, .22);
+  font-family: "Plus Jakarta Sans", sans-serif;
+  animation: xp-float 6s ease-in-out infinite;
+}
+
+.xp-check {
+  display: grid;
+  flex: 0 0 auto;
+  width: max(22px, calc(28 * var(--vv)));
+  height: max(22px, calc(28 * var(--vv)));
+  place-items: center;
+  border-radius: 50%;
+  color: #fff;
+  background:
+    radial-gradient(circle at 35% 28%, rgba(255, 255, 255, .4) 0 12%, transparent 38%),
+    linear-gradient(160deg, #e94383, #a3164a 60%, #850b35);
+  box-shadow: 0 3px 8px rgba(133, 11, 53, .35);
+}
+
+.xp-check svg {
+  width: 60%;
+  height: 60%;
+  stroke-width: 3;
+}
+
+.xp-badge-isolation strong,
+.xp-badge-isolation small {
+  display: block;
+  white-space: nowrap;
+}
+
+.xp-badge-isolation strong {
+  color: var(--xp-ink);
+  font-size: max(9.5px, calc(12.3 * var(--vv)));
+  font-weight: 700;
+  letter-spacing: .02em;
+}
+
+.xp-badge-isolation small {
+  margin-top: 1px;
+  color: var(--xp-text);
+  font-size: max(8.5px, calc(10.3 * var(--vv)));
+}
+
+/* ---------- Entrada ---------- */
+
+.xp-reveal {
+  opacity: 0;
+  translate: 0 18px;
+  transition: opacity .9s ease, translate .9s cubic-bezier(.2, .7, .2, 1);
+}
+
+.xp-section.is-visible .xp-reveal {
+  opacity: 1;
+  translate: 0 0;
+}
+
+.xp-section.is-visible .xp-reveal-2 {
+  transition-delay: .15s;
+}
+
+.xp-section.is-visible .xp-reveal-3 {
+  transition-delay: .3s;
+}
+
+.xp-section.is-visible .xp-reveal-4 {
+  transition-delay: .42s;
+}
+
+.xp-section.is-visible .xp-reveal-5 {
+  transition-delay: .54s;
+}
+
+.xp-section.is-visible .xp-reveal-6 {
+  transition-delay: .7s;
+}
+
+.xp-section.is-visible .xp-card.xp-reveal:hover {
+  translate: 0 -4px;
+  transition-delay: 0s;
+}
+
+/* ---------- Tablet ---------- */
+
+@media (min-width: 640px) {
+  .xp-wrap {
+    width: min(100%, 720px);
+  }
+
+  .xp-panel {
+    padding: 40px 36px 44px;
+  }
+
+  .xp-cards {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  .xp-card {
+    display: block;
+    padding: 18px 16px 18px;
+  }
+
+  .xp-card-icon {
+    margin-bottom: 14px;
+  }
+
+  .xp-actions {
+    flex-direction: row;
+    justify-content: center;
+    gap: 22px;
+  }
+}
+
+/* ---------- Desktop: composição da referência ---------- */
+
+@media (min-width: 1024px) {
+  .xp-section {
+    padding: 40px 0 46px;
+  }
+
+  .xp-wrap {
+    container-type: inline-size;
+    width: min(1360px, 100% - 48px);
+  }
+
+  .xp-panel {
+    --u: calc(100cqw / 1290);
+    display: block;
+    height: calc(727 * var(--u));
+    padding: 0;
+    border-radius: calc(44 * var(--u));
+    text-align: left;
+  }
+
+  .xp-panel-sparkle {
+    top: calc(36 * var(--u));
+    right: calc(52 * var(--u));
+    width: calc(19 * var(--u));
+    height: calc(19 * var(--u));
+  }
+
+  .xp-kicker,
+  .xp-title,
+  .xp-ornament,
+  .xp-description,
+  .xp-cards,
+  .xp-actions,
+  .xp-visual {
+    position: absolute;
+    margin: 0;
+  }
+
+  .xp-kicker {
+    top: calc(47 * var(--u));
+    left: calc(62 * var(--u));
+    height: calc(28 * var(--u));
+    padding: 0 calc(15 * var(--u));
+    gap: calc(9 * var(--u));
+    font-size: calc(11.3 * var(--u));
+    letter-spacing: .19em;
+  }
+
+  .xp-title {
+    top: calc(88 * var(--u));
+    left: calc(72 * var(--u));
+  }
+
+  .xp-title-serif {
+    font-size: calc(43.5 * var(--u));
+    line-height: .925;
+  }
+
+  .xp-title-script {
+    margin-top: calc(-2 * var(--u) - .3em);
+    margin-left: calc(-4 * var(--u));
+    font-size: calc(63 * var(--u));
+    line-height: 1.02;
+  }
+
+  .xp-ornament {
+    top: calc(292 * var(--u));
+    left: calc(72 * var(--u));
+    width: calc(488 * var(--u));
+    height: calc(16 * var(--u));
+  }
+
+  .xp-description {
+    top: calc(322 * var(--u));
+    left: calc(72 * var(--u));
+    width: calc(600 * var(--u));
+    font-size: calc(15.2 * var(--u));
+    line-height: 1.37;
+  }
+
+  .xp-desktop-break {
+    display: inline;
+  }
+
+  .xp-cards {
+    top: calc(423 * var(--u));
+    left: calc(54 * var(--u));
+    grid-template-columns: repeat(3, calc(205 * var(--u)));
+    gap: calc(20 * var(--u));
+    width: auto;
+  }
+
+  .xp-card {
+    display: block;
+    height: calc(180 * var(--u));
+    padding: calc(18 * var(--u)) calc(20 * var(--u)) 0;
+    border-radius: calc(20 * var(--u));
+  }
+
+  .xp-card-icon {
+    width: calc(62 * var(--u));
+    height: calc(62 * var(--u));
+    margin: 0 0 calc(19 * var(--u)) calc(1 * var(--u));
+  }
+
+  .xp-card h3 {
+    font-size: calc(13.6 * var(--u));
+  }
+
+  .xp-card p {
+    margin-top: calc(4 * var(--u));
+    font-size: calc(12.9 * var(--u));
+    line-height: 1.36;
+  }
+
+  .xp-actions {
+    top: calc(625 * var(--u));
+    left: calc(52 * var(--u));
+    flex-direction: row;
+    gap: calc(23 * var(--u));
+    width: auto;
+  }
+
+  .xp-cta {
+    width: calc(312 * var(--u));
+    min-height: 0;
+    height: calc(66 * var(--u));
+    gap: calc(15 * var(--u));
+    padding: 0 calc(16 * var(--u)) 0 calc(28 * var(--u));
+  }
+
+  .xp-cta-calendar {
+    width: calc(23 * var(--u));
+    height: calc(23 * var(--u));
+  }
+
+  .xp-cta-text {
+    font-size: calc(13 * var(--u));
+  }
+
+  .xp-cta-arrow {
+    width: calc(34 * var(--u));
+    height: calc(34 * var(--u));
+  }
+
+  .xp-rating {
+    gap: calc(11 * var(--u));
+    font-size: calc(13.2 * var(--u));
+  }
+
+  .xp-stars svg {
+    width: calc(15 * var(--u));
+    height: calc(15 * var(--u));
+  }
+
+  .xp-visual {
+    top: calc(87 * var(--u));
+    left: calc(742 * var(--u));
+    width: calc(532 * var(--u));
+  }
+
+  .xp-petal {
+    width: calc(var(--w) * 1px);
+  }
+}
+
+/* ========== Destaques (cada elemento com um efeito diferente) ========== */
+
+@property --xp-angle {
+  syntax: "<angle>";
+  initial-value: 0deg;
+  inherits: false;
+}
+
+/* 1. Etiqueta: luz correndo na borda + aura pulsando */
+.xp-kicker {
+  isolation: isolate;
+  animation: xp-kicker-aura 3.5s ease-in-out infinite;
+}
+
+.xp-kicker::before {
+  content: "";
+  position: absolute;
+  inset: -1px;
+  z-index: -1;
+  padding: 1.5px;
+  border-radius: inherit;
+  background: conic-gradient(from var(--xp-angle), transparent 0deg, transparent 230deg, rgba(233, 67, 131, .5) 290deg, #e94383 330deg, #fff 345deg, transparent 355deg);
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask: linear-gradient(#000 0 0) content-box exclude, linear-gradient(#000 0 0);
+  animation: xp-run 4s linear infinite;
+  pointer-events: none;
+}
+
+/* 2. "olhar extraordinário.": reflexo perolado atravessando (ver .xp-title-script)
+   e o coraçãozinho da frase batendo */
+.xp-title-heart {
+  transform-origin: 30% 70%;
+  animation: xp-heart-beat 2.8s ease-in-out infinite;
+}
+
+/* 3. Linha com coração: luzes das pontas até o centro; o coração brilha quando chegam */
+.xp-ornament-light {
+  stroke: #fff;
+  stroke-width: 2.2;
+  stroke-linecap: round;
+  stroke-dasharray: 10 100;
+  stroke-dashoffset: 110;
+  filter: drop-shadow(0 0 3px #e94383);
+  animation: xp-line-run 3.6s ease-in infinite;
+}
+
+.xp-ornament-heart {
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: xp-heart-glow 3.6s ease-in-out infinite;
+}
+
+/* 4. Cards: um efeito por card */
+/* Peso Zero: pena flutuando + reflexo atravessando o card */
+.xp-card-1 .xp-card-icon svg {
+  animation: xp-feather 4.5s ease-in-out infinite;
+}
+
+.xp-card-1::after {
+  background: linear-gradient(115deg, transparent 35%, rgba(255, 255, 255, .85) 50%, transparent 65%) no-repeat;
+  background-size: 250% 100%;
+  background-position: 160% 0;
+  opacity: 1;
+  animation: xp-card-sweep 5s ease-in-out 1s infinite;
+}
+
+/* Alta Retenção: anel de luz girando em volta do relógio, como um ponteiro */
+.xp-card-2 .xp-card-icon {
+  position: relative;
+}
+
+.xp-card-2 .xp-card-icon::after {
+  content: "";
+  position: absolute;
+  inset: -5px;
+  border-radius: 50%;
+  padding: 2.5px;
+  background: conic-gradient(from var(--xp-angle), #e94383 0deg, rgba(233, 67, 131, .15) 270deg, transparent 300deg, #fff 355deg);
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask: linear-gradient(#000 0 0) content-box exclude, linear-gradient(#000 0 0);
+  animation: xp-run 3s linear infinite;
+}
+
+/* Visagismo Único: coração batendo + card pulsando em rosa */
+.xp-card-3 {
+  animation: xp-card-pulse 2.8s ease-in-out infinite;
+}
+
+.xp-card-3 .xp-card-icon svg {
+  fill: rgba(233, 67, 131, .2);
+  animation: xp-heart-beat 2.8s ease-in-out infinite;
+}
+
+/* 5. Moldura da foto: luz mais forte com halo + reflexo atravessando a foto */
+.xp-frame::after {
+  padding: 3px;
+  background: conic-gradient(from var(--xp-frame-angle), transparent 0deg, transparent 220deg, rgba(255, 140, 185, .7) 290deg, #e94383 325deg, #fff 345deg, transparent 356deg);
+  filter: drop-shadow(0 0 6px rgba(233, 67, 131, .8));
+  animation-duration: 7s;
+}
+
+.xp-photo::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  background: linear-gradient(110deg, transparent 40%, rgba(255, 255, 255, .28) 50%, transparent 60%) no-repeat;
+  background-size: 260% 100%;
+  background-position: 170% 0;
+  animation: xp-card-sweep 7s ease-in-out 2s infinite;
+  pointer-events: none;
+}
+
+@keyframes xp-run {
+  to {
+    --xp-angle: 360deg;
+  }
+}
+
+@keyframes xp-text-shine {
+  0% {
+    background-position: 160% 0, 0 0;
+  }
+
+  60%,
+  100% {
+    background-position: -60% 0, 0 0;
+  }
+}
+
+@keyframes xp-kicker-aura {
+
+  0%,
+  100% {
+    box-shadow: inset 0 1px rgba(255, 255, 255, .9);
+  }
+
+  50% {
+    box-shadow: inset 0 1px rgba(255, 255, 255, .9), 0 0 18px rgba(233, 67, 131, .35);
+  }
+}
+
+@keyframes xp-heart-beat {
+
+  0%,
+  42%,
+  100% {
+    transform: scale(1);
+  }
+
+  10% {
+    transform: scale(1.2);
+  }
+
+  20% {
+    transform: scale(1);
+  }
+
+  30% {
+    transform: scale(1.12);
+  }
+}
+
+@keyframes xp-line-run {
+  0% {
+    stroke-dashoffset: 110;
+  }
+
+  70%,
+  100% {
+    stroke-dashoffset: 0;
+  }
+}
+
+@keyframes xp-heart-glow {
+
+  0%,
+  60%,
+  100% {
+    transform: scale(1);
+    filter: none;
+  }
+
+  75% {
+    transform: scale(1.35);
+    filter: drop-shadow(0 0 4px #e94383);
+  }
+}
+
+@keyframes xp-feather {
+
+  0%,
+  100% {
+    transform: translateY(0) rotate(0deg);
+  }
+
+  30% {
+    transform: translateY(-3px) rotate(-12deg);
+  }
+
+  65% {
+    transform: translateY(1px) rotate(8deg);
+  }
+}
+
+@keyframes xp-card-sweep {
+  0% {
+    background-position: 170% 0;
+  }
+
+  55%,
+  100% {
+    background-position: -70% 0;
+  }
+}
+
+@keyframes xp-card-pulse {
+
+  0%,
+  100% {
+    box-shadow:
+      inset 0 0 0 3px rgba(255, 210, 225, .25),
+      0 0 0 1px rgba(246, 170, 198, .3),
+      0 14px 30px -14px rgba(176, 34, 84, .28);
+  }
+
+  50% {
+    box-shadow:
+      inset 0 0 0 3px rgba(255, 210, 225, .4),
+      0 0 0 1px rgba(233, 67, 131, .45),
+      0 14px 30px -14px rgba(176, 34, 84, .32),
+      0 0 22px rgba(233, 67, 131, .3);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+
+  .xp-kicker,
+  .xp-kicker::before,
+  .xp-title-script,
+  .xp-title-heart,
+  .xp-ornament-light,
+  .xp-ornament-heart,
+  .xp-card-1 .xp-card-icon svg,
+  .xp-card-1::after,
+  .xp-card-2 .xp-card-icon::after,
+  .xp-card-3,
+  .xp-card-3 .xp-card-icon svg,
+  .xp-photo::before {
+    animation: none !important;
+  }
+}
+
+/* ---------- Animações ---------- */
+
+@keyframes xp-fade-in {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes xp-frame-run {
+  to {
+    --xp-frame-angle: 360deg;
+  }
+}
+
+@keyframes xp-float {
+
+  0%,
+  100% {
+    translate: 0 0;
+  }
+
+  50% {
+    translate: 0 -4px;
+  }
+}
+
+@keyframes xp-petal-float {
+
+  0%,
+  100% {
+    translate: 0 0;
+    rotate: 0deg;
+  }
+
+  35% {
+    translate: 6px -10px;
+    rotate: 7deg;
+  }
+
+  70% {
+    translate: -5px -4px;
+    rotate: -5deg;
+  }
+}
+
+@keyframes xp-twinkle {
+
+  0%,
+  100% {
+    opacity: .7;
+  }
+
+  50% {
+    opacity: 1;
+  }
+}
+
+@keyframes xp-sparkle {
+
+  0%,
+  100% {
+    opacity: .65;
+    scale: 1;
+  }
+
+  50% {
+    opacity: 1;
+    scale: 1.18;
+  }
+}
+
+@keyframes xp-drift-a {
+
+  0%,
+  100% {
+    translate: 0 0;
+  }
+
+  50% {
+    translate: 0 -14px;
+  }
+}
+
+@keyframes xp-drift-b {
+
+  0%,
+  100% {
+    translate: 0 -8px;
+  }
+
+  50% {
+    translate: 0 10px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+
+  .xp-sparkles,
+  .xp-side-ribbon,
+  .xp-petal,
+  .xp-panel-sparkle,
+  .xp-frame::after,
+  .xp-badge-isolation {
+    animation: none !important;
+  }
+
+  .xp-reveal,
+  .xp-card,
+  .xp-cta::before {
+    transition: none !important;
+  }
+}

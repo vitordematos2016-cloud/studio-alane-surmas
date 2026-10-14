@@ -1,10 +1,81 @@
+# ========================================================
+# Dependências e build
+# ========================================================
 node_modules/
 dist/
+*.log
+
+# ========================================================
+# Variáveis de ambiente (o .env.example vai para o git como modelo)
+# ========================================================
 .env
 .env.*
 !.env.example
+
+# ========================================================
+# Arquivos locais / de trabalho (não fazem parte do deploy)
+# ========================================================
 .tmp/
-*.log
+tmp/
+.preview/
+.vscode/
+.idea/
 .DS_Store
 Thumbs.db
 /video-*.mp4
+
+# Anotações e documentos de planejamento
+/findings.md
+/gemini.md
+/progress.md
+/task_plan.md
+/profissional-dados.md
+/site-cinematografico
+/architecture/
+/tools/
+
+# ========================================================
+# public/ — LISTA DE PERMITIDOS
+# Tudo em public/ é ignorado, exceto os arquivos que o site realmente carrega.
+# Ao adicionar uma imagem nova ao site, inclua uma linha "!" para ela aqui,
+# senão ela não vai para o GitHub e o deploy fica sem a imagem.
+# ========================================================
+/public/**
+!/public/**/
+!/public/_headers
+
+# Marca
+!/public/images/brand/alane-surmas-logo-mark.png
+!/public/images/brand/logo-matos-solucoes-transparent.png
+
+# Hero
+!/public/images/hero/pinca-alane.webp
+
+# Cenário (pétalas, fitas, rosas)
+!/public/images/cenario/petala-individual-*.png
+!/public/images/cenario/fita-vidro3-transparente.png
+!/public/images/cenario/rosa3-transparente.png
+!/public/images/cenario/rosa-vermelha-queda.webp
+!/public/images/cenario/lash-macro-procedure.jpg
+
+# Sobre
+!/public/images/editorial/alane-editorial-carmim.jpg
+
+# Procedimentos
+!/public/assets/procedimentos/capas/*.webp
+
+# Resultados
+!/public/images/secao-resultados/instagram/icone-instagram-flores.png
+!/public/images/secao-resultados/instagram/thumb-insta-0[1-5].jpg
+!/public/images/secao-resultados/procedimentos/procedimento-dermaplaning.png
+!/public/images/secao-resultados/procedimentos/procedimento-designer.jpg
+!/public/images/secao-resultados/procedimentos/procedimento-spa-labial.jpg
+!/public/images/secao-resultados/procedimentos/resultado-brow-lamination.jpg
+!/public/images/secao-resultados/procedimentos/resultado-lash-lifting.jpg
+!/public/images/secao-resultados/procedimentos/resultado-volume-brasileiro.jpg
+
+# Feedbacks
+!/public/images/feedbacks/alane-feedbacks-coracao.webp
+
+# Localização
+!/public/images/studio/studio-recepcao-logo-a.webp

@@ -1,0 +1,1007 @@
+/* ========================================================
+   RODAPÉ — PINK LUXURY CRYSTAL GLASS 3D
+   Fundo em largura total; no desktop as medidas usam --u = 1px da referência (2048px).
+   ======================================================== */
+
+.ft {
+  --wine-deep: #430817;
+  --wine: #650b27;
+  --wine-rose: #831633;
+  --pink: #f04483;
+  --pink-glow: #ff79ad;
+  --pearl: #ffd5e3;
+  --white-rose: #fff4f8;
+  --u: 1px;
+  position: relative;
+  z-index: 10;
+  width: 100%;
+  overflow: hidden;
+  isolation: isolate;
+  color: var(--white-rose);
+  /* Transição: o rosa da seção anterior se dissolve no vinho */
+  padding-top: calc(var(--fade) + 26px);
+  --fade: 110px;
+  background:
+    radial-gradient(ellipse 60% 140px at 50% var(--fade), rgba(255, 121, 173, .35), transparent 70%),
+    radial-gradient(ellipse 50% 70% at 50% 60%, rgba(131, 22, 51, .55), transparent 75%),
+    linear-gradient(180deg,
+      #f7d0dd 0,
+      #eaa4bc calc(var(--fade) * .45),
+      #b34a72 calc(var(--fade) * .8),
+      #6d0f2d var(--fade),
+      #5a0a24 55%,
+      #430817 100%);
+}
+
+/* ---------- Decoração ---------- */
+
+.ft-bg {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+}
+
+.ft-top-line {
+  position: absolute;
+  top: var(--fade);
+  left: 0;
+  right: 0;
+  height: 1.5px;
+  background: linear-gradient(90deg, rgba(255, 121, 173, .2), #ff9cc3 30%, #fff 50%, #ff9cc3 70%, rgba(255, 121, 173, .2));
+  box-shadow: 0 0 10px rgba(255, 121, 173, .8), 0 0 24px rgba(240, 68, 131, .45);
+}
+
+/* Reflexo que corre pela linha superior */
+.ft-top-line::after {
+  content: "";
+  position: absolute;
+  top: -1px;
+  left: -20%;
+  width: 18%;
+  height: 3.5px;
+  border-radius: 50%;
+  background: radial-gradient(closest-side, #fff, rgba(255, 255, 255, 0));
+  animation: ft-line-run 9s ease-in-out infinite;
+}
+
+.ft-sparkles {
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(circle at 4% 30%, #fff 0 1.5px, transparent 3px),
+    radial-gradient(circle at 7% 72%, rgba(255, 255, 255, .9) 0 1.4px, transparent 2.8px),
+    radial-gradient(circle at 12% 46%, rgba(255, 200, 220, .9) 0 1.1px, transparent 2.4px),
+    radial-gradient(circle at 88% 26%, #fff 0 1.3px, transparent 2.6px),
+    radial-gradient(circle at 95% 18%, #fff 0 1.6px, transparent 3.2px),
+    radial-gradient(circle at 93% 64%, rgba(255, 255, 255, .9) 0 1.2px, transparent 2.5px),
+    radial-gradient(circle at 50% 76%, rgba(255, 200, 220, .7) 0 1px, transparent 2.2px);
+  animation: ft-twinkle 7s ease-in-out infinite;
+}
+
+.ft-ribbon {
+  position: absolute;
+  top: calc(var(--fade) - 140px);
+  height: calc(100% - var(--fade) + 160px);
+  aspect-ratio: 1;
+  object-fit: contain;
+  opacity: .5;
+  mix-blend-mode: screen;
+  -webkit-mask-image: linear-gradient(180deg, transparent 0%, #000 16%, #000 82%, transparent 100%);
+  mask-image: linear-gradient(180deg, transparent 0%, #000 16%, #000 82%, transparent 100%);
+}
+
+.ft-ribbon-left {
+  left: 0;
+  transform: translateX(-47%) scaleX(.42);
+  animation: ft-ribbon-a 18s ease-in-out infinite;
+}
+
+.ft-ribbon-right {
+  right: 0;
+  transform: translateX(47%) scaleX(-.42);
+  animation: ft-ribbon-b 21s ease-in-out infinite;
+}
+
+/* ---------- Estrutura (celular primeiro) ---------- */
+
+.ft-inner {
+  position: relative;
+  width: min(100% - 32px, 1720px);
+  margin: 0 auto;
+}
+
+.ft-main {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 28px;
+  text-align: center;
+}
+
+.ft-divider {
+  display: block;
+  width: 60%;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(255, 150, 190, .45), transparent);
+}
+
+/* Identidade */
+.ft-brand {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.ft-brand-row {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+}
+
+.ft-logo {
+  position: relative;
+  display: grid;
+  width: 128px;
+  aspect-ratio: 1;
+  place-items: center;
+  border-radius: 50%;
+  background:
+    radial-gradient(circle at 34% 26%, rgba(255, 255, 255, .45) 0 6%, rgba(255, 255, 255, 0) 24%),
+    radial-gradient(circle at 50% 55%, rgba(255, 150, 190, .28), rgba(131, 22, 51, .55) 70%, rgba(67, 8, 23, .8));
+  box-shadow:
+    inset 0 0 0 2px rgba(255, 170, 205, .75),
+    inset 0 0 0 7px rgba(255, 121, 173, .14),
+    inset 0 0 28px rgba(255, 140, 185, .45),
+    inset 0 -10px 22px rgba(30, 0, 10, .45),
+    0 0 26px rgba(255, 90, 150, .45),
+    0 14px 30px rgba(20, 0, 8, .5);
+}
+
+/* Aro de luz que percorre o círculo de cristal */
+.ft-logo::after {
+  content: "";
+  position: absolute;
+  inset: -2px;
+  border-radius: 50%;
+  padding: 2px;
+  background: conic-gradient(from var(--ft-angle), transparent 0deg, transparent 260deg, rgba(255, 160, 200, .7) 320deg, #fff 345deg, transparent 355deg);
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask: linear-gradient(#000 0 0) content-box exclude, linear-gradient(#000 0 0);
+  animation: ft-orbit 10s linear infinite;
+}
+
+@property --ft-angle {
+  syntax: "<angle>";
+  initial-value: 0deg;
+  inherits: false;
+}
+
+.ft-logo img {
+  width: 78%;
+  height: 78%;
+  object-fit: contain;
+  filter: drop-shadow(0 0 10px rgba(255, 140, 190, .55)) brightness(1.15);
+}
+
+.ft-name strong,
+.ft-name small {
+  display: block;
+}
+
+.ft-name strong {
+  color: var(--white-rose);
+  font-family: "Cormorant Garamond", Georgia, serif;
+  font-size: 30px;
+  font-weight: 500;
+  letter-spacing: .2em;
+  line-height: 1.1;
+  text-shadow: 0 0 18px rgba(255, 150, 195, .35);
+}
+
+.ft-name small {
+  margin-top: 8px;
+  color: var(--pearl);
+  font-family: "Plus Jakarta Sans", sans-serif;
+  font-size: 11.5px;
+  font-weight: 500;
+  letter-spacing: .34em;
+  opacity: .85;
+}
+
+.ft-tagline {
+  display: inline-block;
+  margin: 14px 0 0;
+  color: #ffe8f0;
+  font-family: "Great Vibes", "Pinyon Script", cursive;
+  font-size: 30px;
+  line-height: 1.1;
+  text-shadow: 0 0 14px rgba(255, 140, 190, .45);
+}
+
+/* Inline: quando a frase quebra de linha, o coração acompanha a última palavra */
+.ft-flourish {
+  display: inline-block;
+  vertical-align: -.05em;
+  width: 1.4em;
+  height: .74em;
+  margin-left: .12em;
+  color: var(--pink-glow);
+  overflow: visible;
+  filter: drop-shadow(0 0 5px rgba(255, 121, 173, .7));
+}
+
+/* Navegação */
+.ft-nav {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.ft-nav ul {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.ft-nav li {
+  display: flex;
+  align-items: center;
+}
+
+/* Pontos rosa entre os links */
+.ft-nav li+li::before {
+  content: "";
+  width: 6px;
+  height: 6px;
+  margin: 0 16px;
+  border-radius: 50%;
+  background: var(--pink-glow);
+  box-shadow: 0 0 8px var(--pink);
+}
+
+.ft-nav a {
+  position: relative;
+  padding: 6px 0;
+  color: var(--white-rose);
+  font-family: "Plus Jakarta Sans", sans-serif;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: .1em;
+  text-decoration: none;
+  transition: color .3s ease, text-shadow .3s ease;
+}
+
+.ft-nav a::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 1px;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--pink-glow), transparent);
+  opacity: 0;
+  transform: scaleX(.3);
+  transition: opacity .3s ease, transform .3s ease;
+}
+
+.ft-nav a:hover,
+.ft-nav a:focus-visible {
+  color: #fff;
+  text-shadow: 0 0 10px rgba(255, 121, 173, .9), 0 0 22px rgba(240, 68, 131, .5);
+  outline: none;
+}
+
+.ft-nav a:hover::after,
+.ft-nav a:focus-visible::after {
+  opacity: 1;
+  transform: scaleX(1);
+}
+
+/* Contato */
+.ft-contact {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 18px;
+  width: min(100%, 440px);
+}
+
+.ft-places {
+  display: grid;
+  gap: 14px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  text-align: left;
+}
+
+.ft-places li {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.ft-places strong,
+.ft-places small {
+  display: block;
+}
+
+.ft-places strong {
+  color: var(--white-rose);
+  font-family: "Playfair Display", Georgia, serif;
+  font-size: 20px;
+  font-weight: 600;
+  line-height: 1.2;
+}
+
+.ft-places small {
+  margin-top: 2px;
+  color: var(--pearl);
+  font-family: "Plus Jakarta Sans", sans-serif;
+  font-size: 14px;
+  opacity: .9;
+}
+
+/* Círculos de cristal vinho (localidades e redes) */
+.ft-orb {
+  position: relative;
+  display: grid;
+  flex: 0 0 auto;
+  width: 52px;
+  height: 52px;
+  place-items: center;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  color: #fff;
+  background:
+    radial-gradient(circle at 34% 26%, rgba(255, 255, 255, .55) 0 7%, rgba(255, 255, 255, 0) 30%),
+    radial-gradient(circle at 50% 70%, #d23a72 0%, #9c1a49 50%, #6a0d2d 100%);
+  box-shadow:
+    inset 0 0 0 1.5px rgba(255, 175, 208, .85),
+    inset 0 -5px 10px rgba(40, 0, 14, .45),
+    0 0 16px rgba(255, 80, 145, .5),
+    0 6px 14px rgba(20, 0, 8, .45);
+  cursor: pointer;
+  transition: transform .3s ease, box-shadow .3s ease;
+}
+
+.ft-orb svg {
+  width: 44%;
+  height: 44%;
+  stroke-width: 2;
+}
+
+a.ft-orb:hover,
+button.ft-orb:hover {
+  transform: translateY(-2px);
+  box-shadow:
+    inset 0 0 0 1.5px rgba(255, 200, 225, .95),
+    inset 0 -5px 10px rgba(40, 0, 14, .45),
+    0 0 24px rgba(255, 100, 160, .75),
+    0 8px 16px rgba(20, 0, 8, .45);
+}
+
+.ft-orb:focus-visible,
+.ft-cta:focus-visible,
+.ft-dev a:focus-visible {
+  outline: 2px solid var(--pearl);
+  outline-offset: 3px;
+}
+
+.ft-orb-sm {
+  width: 50px;
+  height: 50px;
+  cursor: default;
+}
+
+.ft-social {
+  display: flex;
+  gap: 30px;
+}
+
+/* Botão de agendamento */
+.ft-cta {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  width: 100%;
+  height: 66px;
+  padding: 0 30px 0 32px;
+  overflow: hidden;
+  border: 0;
+  border-radius: 999px;
+  color: #fff;
+  background:
+    radial-gradient(ellipse 70% 100% at 30% 0%, rgba(255, 150, 190, .45), transparent 70%),
+    linear-gradient(160deg, #d22c69 0%, #a3164a 45%, #6e0c2e 100%);
+  box-shadow:
+    inset 0 0 0 1.5px rgba(255, 170, 205, .85),
+    inset 0 2px 2px rgba(255, 255, 255, .35),
+    inset 0 -8px 16px rgba(40, 0, 14, .4),
+    0 0 26px rgba(255, 80, 145, .45),
+    0 12px 26px rgba(20, 0, 8, .45);
+  font-family: "Plus Jakarta Sans", sans-serif;
+  font-size: 15px;
+  font-weight: 800;
+  letter-spacing: .1em;
+  cursor: pointer;
+  transition: box-shadow .35s ease, filter .35s ease;
+}
+
+.ft-cta span {
+  flex: 1;
+  text-align: left;
+  white-space: nowrap;
+}
+
+.ft-cta-icon {
+  width: 26px;
+  height: 26px;
+  stroke-width: 1.7;
+}
+
+.ft-cta-arrow {
+  width: 24px;
+  height: 24px;
+  transition: transform .35s ease;
+}
+
+/* No hover, uma luz percorre a borda do botão */
+.ft-cta::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  padding: 2px;
+  background: conic-gradient(from var(--ft-cta-angle), transparent 0deg, transparent 250deg, rgba(255, 190, 220, .8) 320deg, #fff 345deg, transparent 355deg);
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask: linear-gradient(#000 0 0) content-box exclude, linear-gradient(#000 0 0);
+  opacity: 0;
+  transition: opacity .35s ease;
+  animation: ft-cta-orbit 2.6s linear infinite;
+}
+
+@property --ft-cta-angle {
+  syntax: "<angle>";
+  initial-value: 0deg;
+  inherits: false;
+}
+
+.ft-cta:hover {
+  filter: brightness(1.08);
+  box-shadow:
+    inset 0 0 0 1.5px rgba(255, 200, 225, .95),
+    inset 0 2px 2px rgba(255, 255, 255, .4),
+    inset 0 -8px 16px rgba(40, 0, 14, .4),
+    0 0 34px rgba(255, 100, 160, .6),
+    0 12px 26px rgba(20, 0, 8, .45);
+}
+
+.ft-cta:hover::before {
+  opacity: 1;
+}
+
+.ft-cta:hover .ft-cta-arrow {
+  transform: translateX(5px);
+}
+
+/* ---------- Linha com coração ---------- */
+
+.ft-heart-line {
+  display: flex;
+  align-items: flex-end;
+  margin-top: 34px;
+  color: var(--pink-glow);
+  filter: drop-shadow(0 0 4px rgba(255, 121, 173, .9)) drop-shadow(0 0 12px rgba(240, 68, 131, .45));
+}
+
+/* A base do coração fica exatamente na borda inferior do SVG (y = 46 no viewBox),
+   então a linha (2px) é centralizada nessa borda: mesma altura em qualquer tela */
+.ft-heart-line-side {
+  position: relative;
+  flex: 1;
+  height: 2px;
+  margin-bottom: -1px;
+  overflow: hidden;
+  background: linear-gradient(90deg, rgba(255, 121, 173, .15), currentColor);
+}
+
+.ft-heart-line-side:last-child {
+  background: linear-gradient(270deg, rgba(255, 121, 173, .15), currentColor);
+}
+
+/* Uma luz só, em 3 etapas do mesmo ciclo: linha esquerda → contorno do coração → linha direita */
+.ft-heart-line-side::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: -15%;
+  width: 12%;
+  background: linear-gradient(90deg, transparent, #fff, transparent);
+  animation: ft-light-left 8s linear infinite;
+}
+
+.ft-heart-line-side:last-child::after {
+  animation-name: ft-light-right;
+}
+
+.ft-heart-light {
+  stroke: #fff;
+  stroke-dasharray: 9 200;
+  stroke-dashoffset: 9;
+  filter: drop-shadow(0 0 3px #fff) drop-shadow(0 0 6px var(--pink-glow));
+  animation: ft-light-heart 8s linear infinite;
+}
+
+.ft-heart-svg {
+  flex: 0 0 auto;
+  width: 82px;
+  height: auto;
+  aspect-ratio: 120 / 46;
+  overflow: visible;
+  animation: ft-heart-glow 4.5s ease-in-out infinite;
+}
+
+/* ---------- Faixa inferior ---------- */
+
+.ft-bottom {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 18px;
+  width: min(100% - 32px, 1720px);
+  margin: 0 auto;
+  padding: 22px 0 96px;
+  text-align: center;
+}
+
+.ft-copy p {
+  margin: 0;
+  font-family: "Plus Jakarta Sans", sans-serif;
+  font-size: 13.5px;
+  line-height: 1.6;
+}
+
+.ft-copy p:first-child {
+  color: var(--white-rose);
+}
+
+.ft-copy p:last-child {
+  color: var(--pearl);
+  opacity: .78;
+}
+
+.ft-motto {
+  display: inline-block;
+  margin: 0;
+  color: var(--white-rose);
+  font-family: "Great Vibes", "Pinyon Script", cursive;
+  font-size: 27px;
+  line-height: 1.1;
+  text-shadow: 0 0 12px rgba(255, 140, 190, .4);
+}
+
+.ft-dev {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.ft-dev span {
+  white-space: nowrap;
+  color: rgba(255, 228, 238, .8);
+  font-family: "Plus Jakarta Sans", sans-serif;
+  font-size: 10.5px;
+  font-weight: 600;
+  letter-spacing: .26em;
+}
+
+.ft-dev a {
+  flex: 0 0 auto;
+  display: grid;
+  height: 44px;
+  padding: 0 12px;
+  place-items: center;
+  border-radius: 13px;
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, .1), rgba(255, 255, 255, 0) 50%),
+    rgba(30, 4, 14, .7);
+  box-shadow: inset 0 0 0 1px rgba(255, 150, 190, .4), 0 0 16px rgba(255, 80, 145, .22), 0 6px 14px rgba(0, 0, 0, .35);
+  transition: box-shadow .3s ease, transform .3s ease;
+}
+
+.ft-dev a:hover {
+  transform: translateY(-2px);
+  box-shadow: inset 0 0 0 1px rgba(255, 180, 210, .7), 0 0 22px rgba(255, 100, 160, .4), 0 6px 14px rgba(0, 0, 0, .35);
+}
+
+.ft-dev img {
+  display: block;
+  height: 27px;
+  width: auto;
+}
+
+/* Celular: fitas bem discretas, só nas bordas */
+@media (max-width: 699px) {
+  .ft-ribbon {
+    opacity: .3;
+  }
+
+  .ft-ribbon-left {
+    transform: translateX(-60%) scaleX(.36);
+  }
+
+  .ft-ribbon-right {
+    transform: translateX(60%) scaleX(-.36);
+  }
+}
+
+/* ---------- Tablet ---------- */
+
+@media (min-width: 700px) {
+  .ft-brand-row {
+    flex-direction: row;
+    text-align: left;
+    gap: 22px;
+  }
+
+  .ft-bottom {
+    flex-direction: row;
+    justify-content: space-between;
+    gap: 24px;
+    padding-bottom: 40px;
+    text-align: left;
+  }
+
+  .ft-divider-sm {
+    width: 1px;
+    height: 44px;
+    background: linear-gradient(180deg, transparent, rgba(255, 150, 190, .45), transparent);
+  }
+
+  .ft-motto {
+    font-size: 24px;
+  }
+}
+
+/* ---------- Desktop: três colunas como na referência ---------- */
+
+@media (min-width: 1100px) {
+  .ft {
+    --u: clamp(.62px, calc(100vw / 2048), 1px);
+    --fade: calc(150 * var(--u));
+    padding-top: calc(var(--fade) + 46 * var(--u));
+  }
+
+  .ft-inner,
+  .ft-bottom {
+    width: min(100% - 64px, calc(1750 * var(--u)));
+  }
+
+  .ft-main {
+    display: grid;
+    grid-template-columns: 36fr auto 29fr auto 35fr;
+    align-items: center;
+    gap: 0;
+    text-align: left;
+  }
+
+  .ft-divider {
+    width: 1px;
+    height: calc(160 * var(--u));
+    background: linear-gradient(180deg, transparent, rgba(255, 150, 190, .5), transparent);
+    box-shadow: 0 0 6px rgba(255, 121, 173, .25);
+  }
+
+  .ft-brand {
+    align-items: flex-start;
+    padding-right: calc(30 * var(--u));
+  }
+
+  .ft-brand-row {
+    gap: calc(26 * var(--u));
+  }
+
+  .ft-logo {
+    width: calc(184 * var(--u));
+  }
+
+  .ft-name strong {
+    font-size: calc(43 * var(--u));
+    letter-spacing: .2em;
+  }
+
+  .ft-name small {
+    margin-top: calc(12 * var(--u));
+    font-size: max(10px, calc(17 * var(--u)));
+  }
+
+  .ft-tagline {
+    margin: calc(2 * var(--u)) 0 0 calc(8 * var(--u));
+    font-size: calc(46 * var(--u));
+    white-space: nowrap;
+    transform: rotate(-4deg);
+    transform-origin: left bottom;
+  }
+
+  .ft-nav {
+    align-items: center;
+    gap: calc(26 * var(--u));
+  }
+
+  .ft-nav li+li::before {
+    width: calc(7 * var(--u));
+    height: calc(7 * var(--u));
+    margin: 0 calc(28 * var(--u));
+  }
+
+  .ft-nav a {
+    font-size: max(11px, calc(17.5 * var(--u)));
+  }
+
+  .ft-contact {
+    align-items: flex-start;
+    gap: calc(20 * var(--u));
+    width: auto;
+    padding-left: calc(62 * var(--u));
+  }
+
+  .ft-places {
+    gap: calc(10 * var(--u));
+  }
+
+  .ft-places li {
+    gap: calc(26 * var(--u));
+  }
+
+  .ft-places strong {
+    font-size: max(15px, calc(25 * var(--u)));
+  }
+
+  .ft-places small {
+    font-size: max(11.5px, calc(18 * var(--u)));
+  }
+
+  .ft-orb {
+    width: calc(58 * var(--u));
+    height: calc(58 * var(--u));
+  }
+
+  .ft-social {
+    gap: calc(36 * var(--u));
+  }
+
+  .ft-cta {
+    width: max(300px, calc(434 * var(--u)));
+    height: calc(76 * var(--u));
+    gap: calc(22 * var(--u));
+    padding: 0 calc(42 * var(--u)) 0 calc(38 * var(--u));
+    font-size: max(11.5px, calc(18 * var(--u)));
+  }
+
+  .ft-cta-icon {
+    width: calc(30 * var(--u));
+    height: calc(30 * var(--u));
+  }
+
+  .ft-cta-arrow {
+    width: calc(28 * var(--u));
+    height: calc(28 * var(--u));
+  }
+
+  .ft-heart-line {
+    margin-top: calc(10 * var(--u));
+  }
+
+  .ft-heart-svg {
+    width: calc(128 * var(--u));
+  }
+
+  /* Espaço inferior para o botão flutuante do WhatsApp não cobrir os créditos */
+  .ft-bottom {
+    padding: calc(30 * var(--u)) 0 max(100px, calc(110 * var(--u)));
+  }
+
+  /* Grade: laterais com a mesma largura, frase sempre centralizada */
+  .ft-bottom {
+    display: grid;
+    grid-template-columns: 1fr auto auto auto 1fr;
+    align-items: center;
+  }
+
+  .ft-copy {
+    min-width: 0;
+  }
+
+  .ft-copy p:first-child {
+    white-space: nowrap;
+  }
+
+  .ft-copy p {
+    font-size: max(11.5px, calc(18 * var(--u)));
+  }
+
+  .ft-motto {
+    flex: 0 0 auto;
+    padding: 0 calc(56 * var(--u));
+    font-size: calc(36 * var(--u));
+  }
+
+  .ft-dev {
+    justify-content: flex-end;
+    gap: calc(16 * var(--u));
+  }
+
+  .ft-dev span {
+    font-size: max(9.5px, calc(13.5 * var(--u)));
+  }
+
+  .ft-dev a {
+    height: max(40px, calc(50 * var(--u)));
+    padding: 0 calc(14 * var(--u));
+    border-radius: calc(15 * var(--u));
+  }
+
+  .ft-dev img {
+    height: max(25px, calc(31 * var(--u)));
+  }
+
+  .ft-ribbon {
+    top: calc(var(--fade) - 200 * var(--u));
+  }
+}
+
+/* Telas de notebook: margem lateral menor, então as fitas recuam mais */
+@media (min-width: 1100px) and (max-width: 1500px) {
+  .ft-ribbon-left {
+    transform: translateX(-58%) scaleX(.4);
+  }
+
+  .ft-ribbon-right {
+    transform: translateX(58%) scaleX(-.4);
+  }
+}
+
+/* ---------- Animações ---------- */
+
+@keyframes ft-line-run {
+
+  0%,
+  15% {
+    left: -20%;
+  }
+
+  85%,
+  100% {
+    left: 105%;
+  }
+}
+
+@keyframes ft-light-left {
+  0% {
+    left: -15%;
+  }
+
+  40%,
+  100% {
+    left: 103%;
+  }
+}
+
+/* Com pathLength = 100: o traço de luz entra pelo início do caminho e sai pelo fim */
+@keyframes ft-light-heart {
+
+  0%,
+  40% {
+    stroke-dashoffset: 9;
+  }
+
+  60%,
+  100% {
+    stroke-dashoffset: -100;
+  }
+}
+
+@keyframes ft-light-right {
+
+  0%,
+  60% {
+    left: -15%;
+  }
+
+  100% {
+    left: 103%;
+  }
+}
+
+@keyframes ft-heart-glow {
+
+  0%,
+  100% {
+    opacity: .82;
+  }
+
+  50% {
+    opacity: 1;
+  }
+}
+
+@keyframes ft-orbit {
+  to {
+    --ft-angle: 360deg;
+  }
+}
+
+@keyframes ft-cta-orbit {
+  to {
+    --ft-cta-angle: 360deg;
+  }
+}
+
+@keyframes ft-twinkle {
+
+  0%,
+  100% {
+    opacity: .65;
+  }
+
+  50% {
+    opacity: 1;
+  }
+}
+
+@keyframes ft-ribbon-a {
+
+  0%,
+  100% {
+    translate: 0 0;
+    filter: brightness(1);
+  }
+
+  50% {
+    translate: 0 -16px;
+    filter: brightness(1.15);
+  }
+}
+
+@keyframes ft-ribbon-b {
+
+  0%,
+  100% {
+    translate: 0 -10px;
+    filter: brightness(1.1);
+  }
+
+  50% {
+    translate: 0 12px;
+    filter: brightness(1);
+  }
+}
+
+/* Fora da tela (ou com movimento reduzido), a decoração fica parada */
+.ft.is-paused *,
+.ft.is-paused *::before,
+.ft.is-paused *::after {
+  animation-play-state: paused !important;
+}
+
+@media (prefers-reduced-motion: reduce) {
+
+  .ft *,
+  .ft *::before,
+  .ft *::after {
+    animation: none !important;
+    transition: none !important;
+  }
+}
